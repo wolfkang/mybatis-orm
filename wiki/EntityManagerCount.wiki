@@ -67,6 +67,19 @@ clause.add("night_check", "IN", new int[] {1,2,3});
 int count = entityManager.count(hospital,clause);
 }}}
 
+배열 대신 List와 같은 Collection 객체를 파라미터 값으로 입력할 수 있다.
+
+{{{
+Hospital hospital = new Hospital();
+Clause clause = new Clause();
+ArrayList list = new ArrayList();
+list.add(1);
+list.add(2);
+list.add(3);
+clause.add("night_check", "IN", list);
+int count = entityManager.count(hospital,clause);
+}}}
+
 생성되는 PreparedStatement
 <code language="sql">
 SELECT COUNT(*)
