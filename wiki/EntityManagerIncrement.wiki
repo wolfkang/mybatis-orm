@@ -16,5 +16,5 @@ entityManager.increment(hospital);
 <code language="sql">
 UPDATE hospital
 SET night_check = night_check + #{nightCheck}
-WHERE hosptailid = #{nightCheck}
+WHERE hosptailid = #{hospitalid}
 </code>
