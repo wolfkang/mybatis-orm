@@ -2,7 +2,7 @@
 
  * [Welcome]
  * [Annotations]
- * [Configuration Spring Configuration]
+ * [Configuration]
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
