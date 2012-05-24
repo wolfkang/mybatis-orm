@@ -18,7 +18,15 @@ if (entityManager.load(hospital)) {
 
 생성되는 MyBatis statement
 <code language="sql">
+/* MySql */
 SELECT *
 FROM hospital
 WHERE hosptailid = #{hospitalid} AND night_check = #{nightCheck}
+LIMIT 1
+
+/* Oracle */
+SELECT *
+FROM hospital
+WHERE hosptailid = #{hospitalid} AND night_check = #{nightCheck}
+    AND ROWNUM = 1
 </code>
