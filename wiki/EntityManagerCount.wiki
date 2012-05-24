@@ -85,7 +85,7 @@ WHERE night_check IN (1, 2, 3)
 {{{
 Hospital hospital = new Hospital();
 Clause clause = new Clause();
-clause.add("night_check", "BETWEEN", new int[] {1,10});
+clause.add("night_check", "BETWEEN", new Integer[] {1,10});
 int count = entityManager.count(hospital,clause);
 }}}
 
