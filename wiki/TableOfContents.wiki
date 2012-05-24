@@ -8,8 +8,8 @@
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
-  * [EntityManagerDelete delete()]
   * [EntityManagerIncrement increment()]
+  * [EntityManagerDelete delete()]
   * [EntityManagerGet get()]
   * [EntityManagerLoad load()]
   * [EntityManagerList list()]
