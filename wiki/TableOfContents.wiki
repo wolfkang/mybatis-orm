@@ -1,17 +1,13 @@
 #sidebar TableOfContents
 
-== Examples ==
-  * [ExampleTable]
-  * [MappingClass]
-
-==== EntityManager ====
-  * [EntityManagerInsert insert()]
-  * [EntityManagerUpdate update()]
-  * [EntityManagerDelete delete()]
-  * [EntityManagerIncrement increment()]
-  * [EntityManagerGet get()]
-  * [EntityManagerLoad load()]
-  * [EntityManagerList list()]
-  * [EntityManagerPage page()]
+  * EntityManager
+   * [EntityManagerInsert insert()]
+   * [EntityManagerUpdate update()]
+   * [EntityManagerDelete delete()]
+   * [EntityManagerIncrement increment()]
+   * [EntityManagerGet get()]
+   * [EntityManagerLoad load()]
+   * [EntityManagerList list()]
+   * [EntityManagerPage page()]
 
 ==== [Clause] ====
