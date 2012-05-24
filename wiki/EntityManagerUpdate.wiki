@@ -14,7 +14,7 @@ hospital.setRegdttm(new Date());
 entityManager.insert(hospital);
 }}}
 
-생성되는 MyBatis SQL
+생성되는 MyBatis statement
 <code language="sql">
 UPDATE hospital
 SET name=#{name}, regdttm=#{regdttm}
