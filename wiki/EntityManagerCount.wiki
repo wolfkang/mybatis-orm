@@ -1,0 +1,104 @@
+#summary EntityManager.count()
+
+== int count(Object parameter) ==
+
+parameter의 null이 아닌 field에 대해 where 절을 생성하여 개수를 count 한다.
+
+예)
+{{{
+Hospital hospital = new Hospital();
+hospital.setHospitalid(1234);
+hospital.setNightCheck(1);
+int count = entityManager.count(hospital);
+}}}
+
+생성되는 MyBatis statement
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE hosptailid = #{hospitalid} AND night_check = #{nightCheck}
+</code>
+
+== int count(Object parameter, String condition) ==
+
+condition으로 where 절을 생성하여 개수를 count 한다.
+
+예)
+{{{
+Hospital hospital = new Hospital();
+hospital.setNightCheck(1);
+int count = entityManager.count(hospital,
+    "night_check > #{nightCheck} AND name LIKE '비타민%'");
+}}}
+
+생성되는 MyBatis statement
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check > #{nightCheck} AND name LIKE '비타민%'
+</code>
+
+== int count(Object parameter, Clause clause) ==
+
+clause 객체로 where 절을 생성하여 개수를 count 한다.
+
+예)
+{{{
+Hospital hospital = new Hospital();
+hospital.setNightCheck(1);
+Clause clause = new Clause();
+clause.add("night_check", ">", "#{nightCheck}");
+clause.add("name","=","비타민");
+int count = entityManager.count(hospital,clause);
+}}}
+
+생성되는 MyBatis statement
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check > #{nightCheck} AND name = '비타민'
+</code>
+
+예)
+{{{
+Hospital hospital = new Hospital();
+Clause clause = new Clause();
+clause.add("night_check", "IN", new int[] {1,2,3});
+int count = entityManager.count(hospital,clause);
+}}}
+
+생성되는 PreparedStatement
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check IN (?, ?, ?)
+</code>
+
+실행되는 SQL
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check IN (1, 2, 3)
+</code>
+
+예)
+{{{
+Hospital hospital = new Hospital();
+Clause clause = new Clause();
+clause.add("night_check", "BETWEEN", new int[] {1,10});
+int count = entityManager.count(hospital,clause);
+}}}
+
+생성되는 PreparedStatement
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check BETWEEN ? AND ?
+</code>
+
+실행되는 SQL
+<code language="sql">
+SELECT COUNT(*)
+FROM hospital
+WHERE night_check BETWEEN 1 AND 10
+</code>
