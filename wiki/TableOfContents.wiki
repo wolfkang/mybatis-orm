@@ -14,5 +14,5 @@
   * [EntityManagerList list()]
   * [EntityManagerPage page()]
 
- * [Clause]
+ * [Condition]
  * [Page]
