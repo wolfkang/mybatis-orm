@@ -12,6 +12,7 @@
   * [EntityManagerDelete delete()]
   * [EntityManagerGet get()]
   * [EntityManagerLoad load()]
+  * [EntityManagerCount count()]
   * [EntityManagerList list()]
   * [EntityManagerPage page()]
 
