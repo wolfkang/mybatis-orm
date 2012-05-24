@@ -12,7 +12,7 @@ hospital.setNightCheck(1);
 hospital = entityManager.get(hospital);
 }}}
 
-생성되는 MyBatis SQL
+생성되는 MyBatis statement
 <code language="sql">
 SELECT *
 FROM hospital
