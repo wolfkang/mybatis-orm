@@ -1,5 +1,7 @@
 #sidebar TableOfContents
 
+[Welcome]
+
   * EntityManager
    * [EntityManagerInsert insert()]
    * [EntityManagerUpdate update()]
@@ -10,4 +12,4 @@
    * [EntityManagerList list()]
    * [EntityManagerPage page()]
 
-==== [Clause] ====
+  * [Clause]
