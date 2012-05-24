@@ -2,9 +2,7 @@
 
  * [Welcome]
  * [Annotations]
- * Example Table & Class
-  * [ExampleTable Example Table]
-  * [ExampleClass Mapping Class]
+ * [Configuration Spring Configuration]
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
