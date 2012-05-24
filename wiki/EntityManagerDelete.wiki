@@ -1,0 +1,19 @@
+#summary EntityManager.delete()
+
+== void delete(Object parameter) ==
+
+parameter 객체에서 null 이 아닌 필드들로 where 절을 생성하여 delete 한다.
+
+예)
+{{{
+Hospital hospital = new Hospital();
+hospital.setName("비타민 병원");
+hospital.setNightCheck(1);
+entityManager.delete(hospital);
+}}}
+
+생성되는 MyBatis SQL
+<code language="sql">
+DELETE FROM hospital
+WHERE name = #{name} AND night_check = #{nightCheck}
+</code>
