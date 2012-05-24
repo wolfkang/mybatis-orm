@@ -4,18 +4,26 @@ EntityManager 클래스는 데이터베이스의 테이블과 클래스를 1:1 �
 
 {{{
 void insert(Object parameter)
+
 void update(Object parameter)
+
 void increment(Object parameter)
+
 void delete(Object parameter)
+
 <T> T get(T parameter)
+
 boolean load(Object parameter)
+
 int count(Object parameter)
 int count(Object parameter, String condition)
 int count(Object parameter, Clause clause)
+
 <T> List<T> list(T parameter)
 <T> List<T> list(T parameter, String orderBy)
 <T> List<T> list(T parameter, String condition, String orderBy)
 <T> List<T> list(T parameter, Clause clause, String orderBy)
+
 <T> Page<T> page(T parameter, int pageNumber, int rows)
 <T> Page<T> page(T parameter, String orderBy, int pageNumber, int rows)
 <T> Page<T> page(T parameter, String condition, String orderBy, int pageNumber, int rows)
