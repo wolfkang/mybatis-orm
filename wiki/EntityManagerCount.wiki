@@ -42,7 +42,7 @@ WHERE night_check > #{nightCheck} AND name LIKE '비타민%'
 
 clause 객체로 where 절을 생성하여 개수를 count 한다.
 
-예)
+예1)
 {{{
 Hospital hospital = new Hospital();
 hospital.setNightCheck(1);
@@ -59,7 +59,7 @@ FROM hospital
 WHERE night_check > #{nightCheck} AND name = '비타민'
 </code>
 
-예)
+예2)
 {{{
 Hospital hospital = new Hospital();
 Clause clause = new Clause();
@@ -81,7 +81,7 @@ FROM hospital
 WHERE night_check IN (1, 2, 3)
 </code>
 
-예)
+예3)
 {{{
 Hospital hospital = new Hospital();
 Clause clause = new Clause();
