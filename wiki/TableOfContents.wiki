@@ -1,9 +1,7 @@
 #sidebar TableOfContents
 
  [Welcome]
- * Annotations
-  * [AnnotationTable Table]
-  * [AnnotationColumn Column]
+ * [Annotations]
  * Example Table & Class
   * [ExampleTable Example Table]
   * [ExampleClass Mapping Class]
