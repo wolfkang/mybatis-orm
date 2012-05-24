@@ -1,20 +1,20 @@
 #sidebar TableOfContents
 
  [Welcome]
-  * Annotations
-   * Table
-   * Column
-  * Example Table & Class
-   * ExampleTable
-   * MappingClass
-  * EntityManager
-   * [EntityManagerInsert insert()]
-   * [EntityManagerUpdate update()]
-   * [EntityManagerDelete delete()]
-   * [EntityManagerIncrement increment()]
-   * [EntityManagerGet get()]
-   * [EntityManagerLoad load()]
-   * [EntityManagerList list()]
-   * [EntityManagerPage page()]
+ * Annotations
+  * Table
+  * Column
+ * Example Table & Class
+  * ExampleTable
+  * MappingClass
+ * EntityManager
+  * [EntityManagerInsert insert()]
+  * [EntityManagerUpdate update()]
+  * [EntityManagerDelete delete()]
+  * [EntityManagerIncrement increment()]
+  * [EntityManagerGet get()]
+  * [EntityManagerLoad load()]
+  * [EntityManagerList list()]
+  * [EntityManagerPage page()]
 
-  * [Clause]
+ * [Clause]
