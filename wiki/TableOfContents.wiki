@@ -1,6 +1,6 @@
 #sidebar TableOfContents
 
-[Welcome]
+ [Welcome]
   * Annotations
    * Table
    * Column
