@@ -1,0 +1,40 @@
+#summary MyBatis-ORM Annotations
+
+= Table =
+{{{
+@Table(value)
+}}}
+
+|| Elements || Description || Type || Default || Database ||
+|| value  || table name || String || "" || All ||
+
+= Column =
+{{{
+@Column(value)
+@Column(name=<>, primaryKey=<>, autoIncrement=<>, sequence=<>)
+}}}
+
+|| Elements || Description || Type || Default || Database ||
+|| value  || column name || String || "" || All ||
+|| name  || column name || String || "" || All ||
+|| primaryKey || primark key or not || boolean || false || MySql ||
+|| autoIncrement || auto increment or not || boolean || false || MySql ||
+|| sequence || sequence name || String || "" || Oracle ||
+
+MySQL에서 autoIncrement 가 true이면, 데이터를 insert한 다음, 자동으로 autoIncrement 컬럼의 생성값이 해당 field에 저정된다. 마찬가지로, Oracle에서 시퀀스명을 설정한 경우, 시퀀스값을 가져와서 해당 field에 저장하고, insert를 수행한다.
+
+= Example =
+For MySQL,
+{{{
+@Table(“hospital”)
+Public class Hospital {
+	@Column(primaryKey=true, autoIncrement=true) private Integer hospitalid;
+	@Column private String name;
+	@Column("night_check") private Integer nightCheck;
+	@Column(name=“regdttm”) private Date regdttm;
+}
+}}}
+
+For Oracle,
+{{{
+}}}
