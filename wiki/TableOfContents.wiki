@@ -1,8 +1,10 @@
 #summary One-sentence summary of this page.
 
-== Introduction ==
+= Examples =
 
-[Examples]
+== EntityManager ==
+ * [EntityManagerList list]
+ * insert
 
 
 = Details =
