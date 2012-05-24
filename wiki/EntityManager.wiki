@@ -17,15 +17,15 @@ boolean load(Object parameter)
 
 int count(Object parameter)
 int count(Object parameter, String condition)
-int count(Object parameter, Clause clause)
+int count(Object parameter, Condition condition)
 
 <T> List<T> list(T parameter)
 <T> List<T> list(T parameter, String orderBy)
 <T> List<T> list(T parameter, String condition, String orderBy)
-<T> List<T> list(T parameter, Clause clause, String orderBy)
+<T> List<T> list(T parameter, Condition condition, String orderBy)
 
 <T> Page<T> page(T parameter, int pageNumber, int rows)
 <T> Page<T> page(T parameter, String orderBy, int pageNumber, int rows)
 <T> Page<T> page(T parameter, String condition, String orderBy, int pageNumber, int rows)
-<T> Page<T> page(T parameter, Clause clause, String orderBy, int pageNumber, int rows)
+<T> Page<T> page(T parameter, Condition condition, String orderBy, int pageNumber, int rows)
 }}}
