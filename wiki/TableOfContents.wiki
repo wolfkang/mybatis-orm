@@ -1,15 +1,15 @@
 #summary One-sentence summary of this page.
 
-= Examples =
+== Examples ==
 
-== EntityManager ==
- * [EntityManagerList list]
- * insert
+==== EntityManager ====
+  * [EntityManagerInsert insert]
+  * [EntityManagerUpdate update]
+  * [EntityManagerDelete delete]
+  * [EntityManagerIncrement increment]
+  * [EntityManagerGet get]
+  * [EntityManagerLoad load]
+  * [EntityManagerList list]
+  * [EntityManagerPage page]
 
-
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+==== [Clause] ====
