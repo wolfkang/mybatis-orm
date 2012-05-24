@@ -1,6 +1,8 @@
-#summary One-sentence summary of this page.
+#sidebar TableOfContents
 
 == Examples ==
+  * [ExampleTable]
+  * [MappingClass]
 
 ==== EntityManager ====
   * [EntityManagerInsert insert()]
