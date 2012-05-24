@@ -1,6 +1,6 @@
 #sidebar TableOfContents
 
- [Welcome]
+ * [Welcome]
  * [Annotations]
  * Example Table & Class
   * [ExampleTable Example Table]
