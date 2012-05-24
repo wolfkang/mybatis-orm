@@ -38,18 +38,18 @@ FROM hospital
 WHERE night_check > #{nightCheck} AND name LIKE '비타민%'
 </code>
 
-== int count(Object parameter, Clause clause) ==
+== int count(Object parameter, Condition condition) ==
 
-clause 객체로 where 절을 생성하여 개수를 count 한다.
+condition 객체로 where 절을 생성하여 개수를 count 한다.
 
 예1)
 {{{
 Hospital hospital = new Hospital();
 hospital.setNightCheck(1);
-Clause clause = new Clause();
-clause.add("night_check", ">", "#{nightCheck}");
-clause.add("name","=","비타민");
-int count = entityManager.count(hospital,clause);
+Condition condition = new Condition();
+condition.add("night_check", ">", "#{nightCheck}");
+condition.add("name","=","비타민");
+int count = entityManager.count(hospital,condition);
 }}}
 
 생성되는 MyBatis statement
@@ -62,22 +62,22 @@ WHERE night_check > #{nightCheck} AND name = '비타민'
 예2)
 {{{
 Hospital hospital = new Hospital();
-Clause clause = new Clause();
-clause.add("night_check", "IN", new int[] {1,2,3});
-int count = entityManager.count(hospital,clause);
+Condition condition = new Condition();
+condition.add("night_check", "IN", new int[] {1,2,3});
+int count = entityManager.count(hospital,condition);
 }}}
 
 배열 대신 List와 같은 Collection 객체를 파라미터 값으로 입력할 수 있다.
 
 {{{
 Hospital hospital = new Hospital();
-Clause clause = new Clause();
+Condition condition = new Condition();
 ArrayList list = new ArrayList();
 list.add(1);
 list.add(2);
 list.add(3);
-clause.add("night_check", "IN", list);
-int count = entityManager.count(hospital,clause);
+condition.add("night_check", "IN", list);
+int count = entityManager.count(hospital,condition);
 }}}
 
 생성되는 PreparedStatement
@@ -97,9 +97,9 @@ WHERE night_check IN (1, 2, 3)
 예3)
 {{{
 Hospital hospital = new Hospital();
-Clause clause = new Clause();
-clause.add("night_check", "BETWEEN", new Integer[] {1,10});
-int count = entityManager.count(hospital,clause);
+Condition condition = new Condition();
+condition.add("night_check", "BETWEEN", new Integer[] {1,10});
+int count = entityManager.count(hospital,condition);
 }}}
 
 생성되는 PreparedStatement
