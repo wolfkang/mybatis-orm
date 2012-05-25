@@ -1,0 +1,29 @@
+#summary Page Class
+
+= API =
+
+== Page(int pageNumber, int rows) ==
+Page 객체를 생성한다.
+|| pageNumber || 현재의 페이지 번호 ||
+|| rows || 한 페이지에 포함되는 아이템의 수 ||
+
+== Page(int pageNumber, int rows, int totalCount) ==
+Page 객체를 생성한다.
+|| pageNumber || 현재의 페이지 번호 ||
+|| rows || 한 페이지에 포함되는 아이템의 수 ||
+|| totalCount || 전체 아이템 수 ||
+ 
+== int getPageNumber() ==
+현재의 페이지 번호를 리턴한다.
+
+== int getRows() ==
+한 페이지에 포함되는 아이템의 수를 리턴한다.
+
+== int getCount() ==
+전체 아이템 수를 리턴한다.
+
+== List<T> getList() ==
+페이지에 포함되어 있는 아이템들을 List에 넣어 리턴한다.
+
+== int getLast() ==
+마지막 페이지 번호를 리턴한다. 만약, 전체 아이템 수가 0이면, 마지막 페이지 번호는 0이다.
