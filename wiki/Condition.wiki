@@ -83,11 +83,3 @@ condition.add("hospitalid","=",1234);
 <code language="sql">
 night_check = #{nightCheck} OR name = '비타민' OR hosptalid = 1234
 </code>
-
-
-
-
-
-생성되는 조건절
-
-}}}
