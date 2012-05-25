@@ -1,0 +1,93 @@
+#summary Condition Class
+
+Condition 클래스는 SQL 생성 시 where 절의 조건문을 다양한 operator와 확장된 값으로 생성하기 위한 클래스이다.
+
+= API =
+
+== Condition() ==
+기본 객체를 생성한다. 기본 구분자는 AND로 지정된다.
+
+== Condition(Seperator seperator) ==
+seperator 구분자로 기본 객체를 생성한다. seperator는 Seperator.AND 혹은 Seperator.OR 값을 갖는다.
+
+== void add(String column, String operator, Object value) ==
+조건문을 추가한다. column은 조건문의 컬럼명, operator는 연산자, value는 컬럼값이다.
+
+operator는 =, <, >, <>, IN, BETWEEN, LIKE를 쓸 수 있다.
+
+value로 사용 가능한는 타입의 목록은 아래와 같다.
+|| primitive type || int, long, float, double, char ||
+|| wrapper type || Integer, Long, Float, Double, String, Character ||
+|| Collection || LinkedList, ArrayList, Vector, TreeSet, HashSet 등 ||
+|| primitive type array || int[], long[], float[], double[], char[] ||
+|| wrapper type array || Integer[], Long[], Float[], Double[], String[], Character[] ||
+
+operator 가 "IN"이면, value는 ( ) 안에 포함어서, 만약, value가 array 혹은 Collection 이면, value는 (?, ?, ?) 처럼 값들이 나열된다.
+
+operator가 "BETWEEN"이면, value는 ? AND ? 와 같은 형태로 조건절에 삽입된다.
+
+== Iterator iterator() ==
+조건문을 Iterator로 접근한다.
+
+= Examples =
+
+예1)
+{{{
+Condition condition = new Condition();
+condition.add("night_check", ">", "#{nightCheck}");
+condition.add("name","=","비타민");
+}}}
+생성되는 조건절
+<code language="sql">
+night_check > #{nightCheck} AND name = '비타민'
+</code>
+
+예2) IN operator 사용시
+{{{
+Condition condition1 = new Condition();
+condition1.add("night_check", "IN", new int[] {1,2,3});
+
+Condition condition2 = new Condition();
+condition2.add("night_check", "IN", new Integer[] {1,2,3});
+
+Condition condition3 = new Condition();
+ArrayList list = new ArrayList();
+list.add(1);
+list.add(2);
+list.add(3);
+condition3.add("night_check", "IN", list);
+}}}
+condition1, condition2, condition3 은 모두 같은 조건절을 생성
+<code language="sql">
+night_check IN (1, 2, 3)
+</code>
+
+예3) BETWEEN operator 사용시
+{{{
+Condition condition = new Condition();
+condition.add("night_check", "BETWEEN", new Integer[] {1,10});
+}}}
+생성되는 조건절
+<code language="sql">
+night_check BETWEEN 1 AND 10
+</code>
+
+예4)구분자를 Seperator.OR 로 지정
+{{{
+Condition condition = new Condition(Seperator.OR);
+condition.add("night_check", ">", "#{nightCheck}");
+condition.add("name","=","비타민");
+condition.add("hospitalid","=",1234);
+}}}
+생성되는 조건절
+<code language="sql">
+night_check = #{nightCheck} OR name = '비타민' OR hosptalid = 1234
+</code>
+
+
+
+
+
+생성되는 조건절
+
+}}}
