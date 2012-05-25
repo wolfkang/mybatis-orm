@@ -1,4 +1,4 @@
-#summary Page Class
+#summary Class Page
 
 = API =
 
