@@ -1,6 +1,6 @@
 #summary MyBatis ORM configuration.
 
-Spring 프레임웍에서 MyBatis ORM 설정을 위해서는 아래의 코드를 Spring의 설정 XML파일에 추가하면 된다.
+Spring 프레임웍에서 MyBatis ORM 설정을 위해서 아래의 코드를 Spring의 설정 XML파일에 추가한다.
 {{{
   <!-- MyBatis ORM -->
   <bean class="org.mybatisorm.EntityManager">
@@ -8,7 +8,7 @@ Spring 프레임웍에서 MyBatis ORM 설정을 위해서는 아래의 코드를
     <property name="sourceType" value="oracle" />
   </bean>
 }}}
-sourceType은 데이터베이스의 종류를 말하는 것으로, mysql 혹은 oracle 을 입력하면 된다. 기본값은 mysql 이다.
+sourceType은 데이터베이스의 종류로, mysql 혹은 oracle을 입력한다. 기본값은 mysql 이다.
 
 아래는 Spring 설정에서 DataSource, MyBatis, MyBatis ORM 설정의 예이다.
 
@@ -81,4 +81,18 @@ sourceType은 데이터베이스의 종류를 말하는 것으로, mysql 혹은 
     <property name="sourceType" value="oracle" />
   </bean>
 </beans>
+}}}
+
+Spring Bean 컨테이너에 등록된 EntityManager 객체는 다음과 같이 접근할 수 있다.
+{{{
+public class HospitalService
+    @Autowired
+    priavte EntityManager entityManager;
+
+    public Hospital getHospital(int hospitalid) {
+        Hospital hospital = new Hospital();
+        hospital.setHospitalid(hospitalid);
+        return entityManager.get(hospital);
+    }
+}
 }}}
