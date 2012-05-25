@@ -13,6 +13,5 @@
   * [EntityManagerCount count()]
   * [EntityManagerList list()]
   * [EntityManagerPage page()]
-
  * [Condition]
  * [Page]
