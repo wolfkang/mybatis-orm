@@ -1,6 +1,6 @@
-#summary MyBatis-ORM Annotations
+#summary MyBatis ORM Annotations
 
-MyBatis-ORM 에서는 @Table, @Column 두 개의 annotation을 사용한다.
+MyBatis ORM 에서는 @Table, @Column 두 개의 annotation을 사용한다.
 
 = Table =
 {{{
