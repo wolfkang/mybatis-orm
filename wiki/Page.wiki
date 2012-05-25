@@ -24,7 +24,7 @@ Page 객체를 생성한다.
 == int getCount() ==
 전체 아이템 수를 리턴한다.
 
-== List<T> getList() ==
+== List`<T>` getList() ==
 페이지에 포함되어 있는 아이템들을 List에 넣어 리턴한다.
 
 == int getLast() ==
