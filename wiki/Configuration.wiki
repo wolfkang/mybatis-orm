@@ -85,6 +85,7 @@ sourceType은 데이터베이스의 종류로, mysql 혹은 oracle을 입력한�
 
 Spring Bean 컨테이너에 등록된 EntityManager 객체는 다음과 같이 접근할 수 있다.
 {{{
+@Service
 public class HospitalService
     @Autowired
     priavte EntityManager entityManager;
