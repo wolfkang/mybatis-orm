@@ -1,8 +1,8 @@
 #sidebar TableOfContents
 
  * [Welcome]
- * [Annotations]
  * [Configuration]
+ * [Annotations]
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
