@@ -37,6 +37,7 @@ sourceType은 데이터베이스의 종류로, mysql 혹은 oracle을 입력한�
     </property>
   </bean>
 
+  <!-- DataSource 설정 -->
   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
     destroy-method="close">
     <property name="username" value="${db.username}" />
