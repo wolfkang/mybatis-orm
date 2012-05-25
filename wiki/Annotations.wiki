@@ -1,5 +1,7 @@
 #summary MyBatis-ORM Annotations
 
+MyBatis-ORM 에서는 @Table, @Column 두 개의 annotation을 사용합니다.
+
 = Table =
 {{{
 @Table(value)
