@@ -1,5 +1,7 @@
 #summary Class Page
 
+EntityManager에서 page() 메쏘드를 호출했을 때 리턴되는 객체이다. 전체 row의 수와 해당 페이지에 포함되는 row의 객체 List를 가지고 있다.
+
 = API =
 
 == Page(int pageNumber, int rows) ==
