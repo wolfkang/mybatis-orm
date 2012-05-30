@@ -51,21 +51,27 @@ Condition condition2 = new Condition();
 condition2.add("night_check", "IN", new Integer[] {1,2,3});
 
 Condition condition3 = new Condition();
+condition3.add("night_check", "IN", 1, 2, 3);
+
+Condition condition4 = new Condition();
 ArrayList list = new ArrayList();
 list.add(1);
 list.add(2);
 list.add(3);
-condition3.add("night_check", "IN", list);
+condition4.add("night_check", "IN", list);
 }}}
-condition1, condition2, condition3 은 모두 같은 조건절을 생성
+condition1, condition2, condition3, condition4 은 모두 같은 조건절을 생성
 <code language="sql">
 night_check IN (1, 2, 3)
 </code>
 
 == 예3. BETWEEN operator 사용 ==
 {{{
-Condition condition = new Condition();
+Condition condition1 = new Condition();
 condition.add("night_check", "BETWEEN", new Integer[] {1,10});
+
+Condition condition2 = new Condition();
+condition.add("night_check", "BETWEEN", 1, 10);
 }}}
 생성되는 조건절
 <code language="sql">
