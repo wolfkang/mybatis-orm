@@ -22,9 +22,9 @@ value로 사용 가능한는 타입의 목록은 아래와 같다.
 || primitive type array || int`[]`, long`[]`, float`[]`, double`[]`, char`[]` ||
 || wrapper type array || Integer`[]`, Long`[]`, Float`[]`, Double`[]`, String`[]`, Character`[]` ||
 
-operator 가 "IN"이면, value는 ( ) 안에 포함어서, 만약, value가 array 혹은 Collection 이면, value는 (?, ?, ?) 처럼 값들이 나열된다.
+operator 가 "IN"이면, value는 ( ) 안에 포함된다. 이 때, value가 array 혹은 Collection 이면, value는 *(?, ?, ?)* 처럼 값들이 나열된다.
 
-operator가 "BETWEEN"이면, value는 ? AND ? 와 같은 형태로 조건절에 삽입된다.
+operator가 "BETWEEN"이면, value는 *? AND ?* 와 같은 형태로 조건절에 삽입된다.
 
 == Iterator iterator() ==
 조건문을 Iterator로 접근한다.
