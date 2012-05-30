@@ -49,8 +49,7 @@ public abstract class ValueGeneratorImpl implements ValueGenerator {
 				configuration,
 				builder.id() + "-Inline",
 				resultTypeClass,
-				new ArrayList<ResultMapping>(),
-				null);
+				new ArrayList<ResultMapping>());
 		resultMaps.add(inlineResultMapBuilder.build());
 		builder.resultMaps(resultMaps);
 		builder.resultSetType(null);
@@ -60,7 +59,7 @@ public abstract class ValueGeneratorImpl implements ValueGenerator {
 		MappedStatement statement = builder.build();
 		configuration.addMappedStatement(statement);
 
-		MappedStatement keyStatement = configuration.getMappedStatement(id, false);
+		MappedStatement keyStatement = configuration.getMappedStatement(id);
 		KeyGenerator keyGen = new SelectKeyGenerator(keyStatement, getExecuteBefore());
 		configuration.addKeyGenerator(id,keyGen);
 		return keyGen;
