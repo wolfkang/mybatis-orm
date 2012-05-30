@@ -50,8 +50,13 @@ public class Condition {
 	public void setSeperator(Seperator seperator) {
 		this.seperator = seperator;
 	}
-	public void add(String column, String operator, Object value) {
-		list.add(new Item(column,operator,value));
+	public void add(String column, String operator, Object ... value) {
+		Object v = value;
+		if (operator != null)
+			operator = operator.trim();
+		if (value != null && value.length == 1)
+			v = value[0];
+		list.add(new Item(column,operator,v));
 	}
 	public Iterator<Item> iterator() {
 		return list.iterator();
