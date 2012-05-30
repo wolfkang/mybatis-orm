@@ -19,8 +19,8 @@ value로 사용 가능한는 타입의 목록은 아래와 같다.
 || primitive type || int, long, float, double, char ||
 || wrapper type || Integer, Long, Float, Double, String, Character ||
 || Collection || LinkedList, ArrayList, Vector, TreeSet, HashSet 등 ||
-|| primitive type array || int[], long[], float[], double[], char[] ||
-|| wrapper type array || Integer[], Long[], Float[], Double[], String[], Character[] ||
+|| primitive type array || int`[]`, long`[]`, float`[]`, double`[]`, char`[]` ||
+|| wrapper type array || Integer`[]`, Long`[]`, Float`[]`, Double`[]`, String`[]`, Character`[]` ||
 
 operator 가 "IN"이면, value는 ( ) 안에 포함어서, 만약, value가 array 혹은 Collection 이면, value는 (?, ?, ?) 처럼 값들이 나열된다.
 
