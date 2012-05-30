@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.mybatisorm.Condition.Item;
@@ -11,8 +13,10 @@ import org.mybatisorm.annotation.AnnotationUtil;
 
 public class Query {
 
-	private static final String PARAMETER_PATTERN = "#\\{([0-9a-zA-Z_]+)\\}";
+	private static final String PARAMETER_RE = "#\\{([0-9a-zA-Z_]+)\\}";
 
+	private static final Pattern PARAMETER_PATTERN = Pattern.compile(PARAMETER_RE);
+	
 	public static final String PARAMETER_PREFIX = "parameter.";
 
 	private static final String CONDITION_REPLACEMENT = "#{" + PARAMETER_PREFIX + "$1}";
@@ -99,7 +103,7 @@ public class Query {
 	}
 	private void setCondition(String condition) {
 		if (condition != null)
-			this.condition = condition.replaceAll(PARAMETER_PATTERN, CONDITION_REPLACEMENT);
+			this.condition = condition.replaceAll(PARAMETER_RE, CONDITION_REPLACEMENT);
 	}
 	public int getStart() {
 		return start;
@@ -154,8 +158,11 @@ public class Query {
 	}
 	
 	private String addProperty(Object value) {
-		if (value instanceof String && ((String)value).matches(PARAMETER_PATTERN))
-			return (String)value;
+		if (value instanceof String) {
+			Matcher m = PARAMETER_PATTERN.matcher((String)value);
+			if (m.find())
+				return (String)value;
+		}
 		if (properties == null)
 			properties = new HashMap<String,Object>();
 		int index = properties.size();
