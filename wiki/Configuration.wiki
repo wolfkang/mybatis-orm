@@ -1,6 +1,7 @@
 #summary MyBatis ORM configuration.
 
-Spring 프레임웍에서 MyBatis ORM 설정을 위해서 아래의 코드를 Spring의 설정 XML파일에 추가한다.
+Spring 프레임웍에서 MyBatis ORM 설정을 위해서는 먼저 MyBatis [http://www.mybatis.org/spring/factorybean.html SqlSessionFactory]를 설정한 다음, 아래의 코드를 Spring의 설정 XML파일에 추가한다.
+
 {{{
   <!-- MyBatis ORM -->
   <bean class="org.mybatisorm.EntityManager">
