@@ -183,7 +183,7 @@ public class Query {
 				return addProperties((double[])values,delimiter);
 			}
 			return addProperties((Object[])values,delimiter);
-		} 
+		}
 		return (values instanceof Collection) ? addProperties((Collection<?>)values,delimiter) :
 				addProperty(values);
 	}
