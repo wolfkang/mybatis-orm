@@ -117,6 +117,30 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	}
 	
 	/**
+	 * condition으로 where 조건을 생성하여 매핑 테이블을 delete 한다.
+	 * 
+	 * @param parameter
+	 * @param condition
+	 */
+	public void delete(Object parameter, String condition) {
+		Class<?> clazz = parameter.getClass();
+		String statementName = addStatement(DeleteSqlSource.class, clazz, null);
+		sqlSession.delete(statementName, new Query(parameter,condition,null));
+	}
+	
+	/**
+	 * condition으로 where 조건을 생성하여 매핑 테이블을 delete 한다.
+	 * 
+	 * @param parameter
+	 * @param condition
+	 */
+	public void delete(Object parameter, Condition condition) {
+		Class<?> clazz = parameter.getClass();
+		String statementName = addStatement(DeleteSqlSource.class, clazz, null);
+		sqlSession.delete(statementName, new Query(parameter,condition,null));
+	}
+	
+	/**
 	 * object의 null이 아닌 field에 대해 AND 조건으로 where 조건을 생성하여 매핑 테이블에서 1 row만  select한 다음,
 	 * parameter 객체에 값을 setting 한다.
 	 * 
