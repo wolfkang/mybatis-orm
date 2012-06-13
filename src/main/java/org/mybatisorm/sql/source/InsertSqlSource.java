@@ -20,7 +20,7 @@ public class InsertSqlSource extends DynamicSqlBuilder {
 	}
 
 	public BoundSql getBoundSql(final Object parameter) {
-		FieldList fieldList = AnnotationUtil.getNotNullFieldList(parameter);
+		FieldList fieldList = AnnotationUtil.getInsertFieldList(parameter);
 		StringBuilder sb = new StringBuilder(staticSql);
 		sb.append(AnnotationUtil.join(fieldList.getColumnNames(), ",")).append(") VALUES (")
 				.append(AnnotationUtil.join(fieldList.getFieldNames(), "#{%1$s}", ",")).append(")");

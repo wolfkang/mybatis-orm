@@ -220,6 +220,23 @@ public class AnnotationUtil {
 		return fieldList;
 	}
 
+	public static FieldList getInsertFieldList(Object object) {
+		FieldList fieldList = new FieldList();
+		BeanWrapper bean = new BeanWrapperImpl(object);
+		for (Field field : getDeclaredFields(object.getClass())) {
+			if (field.isAnnotationPresent(Column.class)) {
+				Column column = field.getAnnotation(Column.class); 
+				if (!column.autoIncrement() && "".equals(column.sequence())) {
+					Object value = bean.getPropertyValue(field.getName());
+					if (value != null) {
+						fieldList.add(field.getName(), getName(column,field));
+					}
+				}
+			}
+		}
+		return fieldList;
+	}
+	
 	public static <T>String join(final Collection<T> objs, final String delimiter) {
 		if (objs == null || objs.isEmpty())
 			return "";
