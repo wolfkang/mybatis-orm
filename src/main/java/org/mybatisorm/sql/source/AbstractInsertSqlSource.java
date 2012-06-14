@@ -10,17 +10,16 @@ import org.mybatisorm.annotation.SqlCommand;
 import org.mybatisorm.sql.builder.DynamicSqlBuilder;
 
 @SqlCommand(SqlCommandType.INSERT)
-public class InsertSqlSource extends DynamicSqlBuilder {
+public abstract class AbstractInsertSqlSource extends DynamicSqlBuilder {
 
-	private static Logger logger = Logger.getLogger(InsertSqlSource.class);
+	private static Logger logger = Logger.getLogger(AbstractInsertSqlSource.class);
 	
-	public InsertSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
+	public AbstractInsertSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
 		super(sqlSourceParser);
 		staticSql = "INSERT INTO " + AnnotationUtil.getTableName(clazz) + "(";
 	}
 
-	public BoundSql getBoundSql(final Object parameter) {
-		FieldList fieldList = AnnotationUtil.getInsertFieldList(parameter);
+	public BoundSql getBoundSql(final Object parameter, FieldList fieldList) {
 		StringBuilder sb = new StringBuilder(staticSql);
 		sb.append(AnnotationUtil.join(fieldList.getColumnNames(), ",")).append(") VALUES (")
 				.append(AnnotationUtil.join(fieldList.getFieldNames(), "#{%1$s}", ",")).append(")");

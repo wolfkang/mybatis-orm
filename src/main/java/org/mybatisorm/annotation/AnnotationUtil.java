@@ -220,13 +220,13 @@ public class AnnotationUtil {
 		return fieldList;
 	}
 
-	public static FieldList getInsertFieldList(Object object) {
+	public static FieldList getNonAutoIncrementNotNullFieldList(Object object) {
 		FieldList fieldList = new FieldList();
 		BeanWrapper bean = new BeanWrapperImpl(object);
 		for (Field field : getDeclaredFields(object.getClass())) {
 			if (field.isAnnotationPresent(Column.class)) {
 				Column column = field.getAnnotation(Column.class); 
-				if (!column.autoIncrement() && "".equals(column.sequence())) {
+				if (!column.autoIncrement()) {
 					Object value = bean.getPropertyValue(field.getName());
 					if (value != null) {
 						fieldList.add(field.getName(), getName(column,field));

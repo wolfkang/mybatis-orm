@@ -19,7 +19,6 @@ import org.mybatisorm.exception.InvalidSqlSourceException;
 import org.mybatisorm.sql.source.CountSqlSource;
 import org.mybatisorm.sql.source.DeleteSqlSource;
 import org.mybatisorm.sql.source.IncrementSqlSource;
-import org.mybatisorm.sql.source.InsertSqlSource;
 import org.mybatisorm.sql.source.ListSqlSource;
 import org.mybatisorm.sql.source.UpdateSqlSource;
 import org.mybatisorm.sql.source.ValueGenerator;
@@ -41,6 +40,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	private String sourceType = "mysql";  // 기본 소스타입은 "mysql"
 	private Class<?> loadSqlSourceClass;
 	private Class<?> pageSqlSourceClass;
+	private Class<?> insertSqlSourceClass;
 	private ValueGenerator valueGenerator;
 	private String sourceTypePackage;
 	
@@ -64,6 +64,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		
 		loadSqlSourceClass = getSourceTypeClass("LoadSqlSource");
 		pageSqlSourceClass = getSourceTypeClass("PageSqlSource");
+		insertSqlSourceClass = getSourceTypeClass("InsertSqlSource");
 		valueGenerator = (ValueGeneratorImpl)getSourceTypeClass("ValueGenerator").newInstance();
 		valueGenerator.setConfiguration(configuration);
 	}
@@ -90,7 +91,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void insert(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(InsertSqlSource.class, clazz, null); 
+		String statementName = addStatement(insertSqlSourceClass, clazz, null); 
 		sqlSession.insert(statementName, parameter);
 	}
 	
@@ -121,6 +122,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 * 
 	 * @param parameter
 	 * @param condition
+	 * @since 0.2.2
 	 */
 	public void delete(Object parameter, String condition) {
 		Class<?> clazz = parameter.getClass();
@@ -133,6 +135,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 * 
 	 * @param parameter
 	 * @param condition
+	 * @since 0.2.2
 	 */
 	public void delete(Object parameter, Condition condition) {
 		Class<?> clazz = parameter.getClass();
