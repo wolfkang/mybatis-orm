@@ -4,8 +4,16 @@
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
 {{{
-1안
+// 1안
 @Join("Blog LEFT Author LEFT Post LEFT Comment LEFT PostTag LEFT TAG")
+
+// 2안
+@Join("Blog LEFT Author ON Blog.authorId = Author.id\
+LEFT Post ON Blog.id = Post.blogId\
+LEFT Comment ON Post.id = Comment.PostId
+LEFT PostTag ON PostTag.postId = Post.id
+LEFT TAG ON PostTag.tagId = Tag.id")
+
 class BlogResult {
     @Fields("id,title,authorId")
     Blog blog;
@@ -19,13 +27,6 @@ class BlogResult {
     @Fields("id,name")
     Tag tag
 }
-
-2안
-@Join("Blog LEFT Author ON Blog.authorId = Author.id\
-LEFT Post ON Blog.id = Post.blogId\
-LEFT Comment ON Post.id = Comment.PostId
-LEFT PostTag ON PostTag.postId = Post.id
-LEFT TAG ON PostTag.tagId = Tag.id")
 }}}
 
 {{{
