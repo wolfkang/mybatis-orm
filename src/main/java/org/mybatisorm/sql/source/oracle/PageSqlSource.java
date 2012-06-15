@@ -5,8 +5,9 @@ import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.log4j.Logger;
 import org.mybatisorm.Query;
-import org.mybatisorm.annotation.AnnotationUtil;
 import org.mybatisorm.annotation.SqlCommand;
+import org.mybatisorm.annotation.handler.ColumnHandler;
+import org.mybatisorm.annotation.handler.TableHandler;
 import org.mybatisorm.sql.builder.DynamicSqlBuilder;
 
 @SqlCommand(SqlCommandType.SELECT)
@@ -16,9 +17,9 @@ public class PageSqlSource extends DynamicSqlBuilder {
 	
 	public PageSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
 		super(sqlSourceParser);
-		staticSql = "SELECT " + AnnotationUtil.getColumnAsFieldComma(clazz) + " FROM " +
-				"(SELECT " + AnnotationUtil.getColumnComma(clazz) + ", ROWNUM rnum FROM " +
-				AnnotationUtil.getTableName(clazz) + " WHERE ";
+		staticSql = "SELECT " + ColumnHandler.getColumnComma(clazz) + " FROM " +
+				"(SELECT " + ColumnHandler.getColumnComma(clazz) + ", ROWNUM rnum FROM " +
+				TableHandler.getName(clazz) + " WHERE ";
 	}
 
 	public BoundSql getBoundSql(Object queryParam) {

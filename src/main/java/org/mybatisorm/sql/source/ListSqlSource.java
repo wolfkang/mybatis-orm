@@ -4,7 +4,7 @@ import org.apache.ibatis.builder.SqlSourceBuilder;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.log4j.Logger;
 import org.mybatisorm.Query;
-import org.mybatisorm.annotation.AnnotationUtil;
+import org.mybatisorm.annotation.handler.ColumnHandler;
 
 public class ListSqlSource extends AbstractSelectSqlSource {
 
@@ -26,7 +26,7 @@ public class ListSqlSource extends AbstractSelectSqlSource {
 			if (query.getOrderBy() != null)
 				sb.append(" ORDER BY ").append(query.getOrderBy());
 		} else {
-			where = AnnotationUtil.getNotNullColumnEqualFieldAnd(parameter);
+			where = ColumnHandler.getNotNullColumnEqualFieldAnd(parameter);
 			if (where.length() > 0) {
 				sb.append(" WHERE ").append(where);
 			}
