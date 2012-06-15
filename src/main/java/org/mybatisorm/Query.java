@@ -144,7 +144,7 @@ public class Query {
 		while (it.hasNext()) {
 			Item item = it.next();
 			sb.append(item.getColumn()).append(" ").append(item.getOperator()).append(" ");
-			if ("IN".equalsIgnoreCase(item.getOperator())) {
+			if ("IN".equalsIgnoreCase(item.getOperator()) || "NOT IN".equalsIgnoreCase(item.getOperator())) {
 				sb.append("(").append(addProperties(item.getValue(),",")).append(")");
 			} else if ("BETWEEN".equalsIgnoreCase(item.getOperator())) {
 				sb.append(addProperties(item.getValue()," AND "));
