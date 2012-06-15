@@ -1,0 +1,62 @@
+#summary One-sentence summary of this page.
+
+= Annotation =
+
+ * `@Join`, `@Fields` 추가
+ * `@Column` 에 references 속성 추가
+
+= Sample =
+
+{{{
+@Join
+class GroupAndUser {
+    @fields("groupKey,groupName")
+    Group group;
+    @fields("roleType")
+    GroupUser groupUser;
+    @fields("*")
+    User user;
+}
+
+@Table
+class Group {
+    @Column(primaryKey=true)
+    Long groupKey;
+    @Column
+    String groupName;
+}
+
+@Table
+class GroupUser {
+    @Column(references="Group.groupKey")
+    Long groupKey;
+    @Column(references="User.userKey")
+    Long userKey;
+}
+
+@Table
+class User {
+    @Column(primaryKey=true)
+    Long userKey;
+    @Column
+    String useName;
+}
+
+Group group = new Group();
+group.setGroupKey(1);
+GroupAndUser gu = new GroupAndUser();
+gu.setGroup(group);
+
+List<GroupAndUser> list = entityManager.list(gu);
+for (GroupAndUser gau : list) {
+    System.out.println(gau.getUser().getUserName();
+}
+}}}
+
+{{{
+SELECT A.group_key group_groupKey, A.group_name, group_groupName,
+    B.role_type groupUser_roleType,
+    C.user_key user_userKey, C.user_name user_userName
+FROM NC_GROUP A INNER JOIN NC_GROUP_USER B ON A.group_key = B.group_key INNER JOIN NC_USER C ON B.user_key = C.user_key
+WHERE A.group_key = 1
+}}}
