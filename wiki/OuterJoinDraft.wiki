@@ -4,7 +4,8 @@
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
 {{{
-@Join
+1안
+@Join("Blog LEFT Author LEFT Post LEFT Comment LEFT PostTag LEFT TAG")
 class BlogResult {
     @Fields("id,title,authorId")
     Blog blog;
@@ -18,4 +19,20 @@ class BlogResult {
     @Fields("id,name")
     Tag tag
 }
+
+2안
+@Join("Blog LEFT Author ON Blog.authorId = Author.id\
+LEFT Post ON Blog.id = Post.blogId\
+LEFT Comment ON Post.id = Comment.PostId
+LEFT PostTag ON PostTag.postId = Post.id
+LEFT TAG ON PostTag.tagId = Tag.id")
+}}}
+
+{{{
+from Blog B
+       left outer join Author A on B.author_id = A.id
+       left outer join Post P on B.id = P.blog_id
+       left outer join Comment C on P.id = C.post_id
+       left outer join Post_Tag PT on PT.post_id = P.id
+       left outer join Tag T on PT.tag_id = T.id
 }}}
