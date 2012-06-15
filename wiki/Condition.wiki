@@ -2,13 +2,15 @@
 
 Condition 클래스는 SQL 생성 시 where 절의 조건문을 다양한 operator와 확장된 값으로 생성하기 위한 클래스이다.
 
-= API =
+= Constructors =
 
 == Condition() ==
 기본 객체를 생성한다. 기본 구분자는 AND로 지정된다.
 
 == Condition(Seperator seperator) ==
 seperator 구분자로 기본 객체를 생성한다. seperator는 Seperator.AND 혹은 Seperator.OR 값을 갖는다.
+
+= Methods =
 
 == void add(String column, String operator, Object value) ==
 조건문을 추가한다. column은 조건문의 컬럼명, operator는 연산자, value는 컬럼값이다.
