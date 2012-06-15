@@ -1,0 +1,21 @@
+#summary One-sentence summary of this page.
+
+= Sample =
+http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
+
+{{{
+@Join
+class BlogResult {
+    @Fields("id,title,authorId")
+    Blog blog;
+    @Fields("id,username,passwod,email,bio,favouriteSection")
+    Author author;
+    @Fields("id,blogId,authorId,createdOn,section,subject,draft,body")
+    Post post;
+    @Fields("id,postId,name,comment")
+    Comment comment;
+    PostTag postTag;
+    @Fields("id,name")
+    Tag tag
+}
+}}}
