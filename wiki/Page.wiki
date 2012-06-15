@@ -2,7 +2,7 @@
 
 EntityManager에서 page() 메쏘드를 호출했을 때 리턴되는 객체이다. 전체 row의 수와 해당 페이지에 포함되는 row의 객체 List를 가지고 있다.
 
-= API =
+= Constructors =
 
 == Page(int pageNumber, int rows) ==
 Page 객체를 생성한다.
@@ -15,6 +15,8 @@ Page 객체를 생성한다.
 || rows || 한 페이지에 포함되는 아이템의 수 ||
 || totalCount || 전체 아이템 수 ||
  
+= Methods =
+
 == int getPageNumber() ==
 현재의 페이지 번호를 리턴한다.
 
