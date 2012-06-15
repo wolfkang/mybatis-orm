@@ -1,0 +1,35 @@
+#summary One-sentence summary of this page.
+
+
+{{{
+@Join
+class GroupAndUser {
+    Group group;
+    GroupUser groupUser;
+    User user;
+}
+
+@Table
+class Group {
+    @Column(primaryKey=true)
+    Long groupKey;
+}
+
+@Table
+class GroupUser {
+    @Column(references="Group.groupKey")
+    Long groupKey;
+    @Column(references="User.userKey")
+    Long userKey;
+}
+
+@Table
+class User {
+    @Column(primaryKey=true)
+    Long userKey;
+}
+
+entityManager.list(group);
+
+SELECT A.group_key group_groupKey, B.role_type groupUser_roleType, C.user_key user_userKey
+FROM NC_GROUP A inner join NC_GROUP_USER B ON A.group_key = B.group_key inner JOIN NC_USER C ON B.user_key = C.user_key 
