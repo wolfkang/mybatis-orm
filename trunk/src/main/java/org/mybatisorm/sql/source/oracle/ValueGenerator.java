@@ -5,8 +5,8 @@ import java.lang.reflect.Field;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.keygen.NoKeyGenerator;
 import org.apache.ibatis.mapping.MappedStatement.Builder;
-import org.mybatisorm.annotation.AnnotationUtil;
 import org.mybatisorm.annotation.Column;
+import org.mybatisorm.annotation.handler.ColumnHandler;
 import org.mybatisorm.sql.source.ValueGeneratorImpl;
 
 public class ValueGenerator extends ValueGeneratorImpl {
@@ -17,7 +17,7 @@ public class ValueGenerator extends ValueGeneratorImpl {
 	}
 	
 	protected GeneratedField getGeneratedField(Class<?> clazz) {
-		for (Field field : AnnotationUtil.getDeclaredFields(clazz)) {
+		for (Field field : ColumnHandler.getDeclaredFields(clazz)) {
 			if (field.isAnnotationPresent(Column.class)) {
 				Column column = field.getAnnotation(Column.class); 
 				String sequence = column.sequence(); 
