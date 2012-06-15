@@ -10,11 +10,11 @@
 {{{
 @Join
 class GroupAndUser {
-    @fields("groupKey,groupName")
+    @Fields("groupKey,groupName")
     Group group;
-    @fields("roleType")
+    @Fields("roleType")
     GroupUser groupUser;
-    @fields("*")
+    @Fields("*")
     User user;
 }
 
