@@ -72,13 +72,13 @@ http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
 {{{
 
-@Join("Blog LEFT Author LEFT Post LEFT Comment LEFT PostTag LEFT TAG")
+@Join("blog LEFT author LEFT post LEFT comment LEFT postTag LEFT tag")
 
-@Join("Blog LEFT Author ON Blog.authorId = Author.id\
-LEFT Post ON Blog.id = Post.blogId\
-LEFT Comment ON Post.id = Comment.PostId
-LEFT PostTag ON PostTag.postId = Post.id
-LEFT TAG ON PostTag.tagId = Tag.id")
+@Join("blog LEFT author ON blog.authorId = author.id\
+LEFT post ON blog.id = post.blogId\
+LEFT comment ON post.id = comment.PostId
+LEFT postTag ON postTag.postId = post.id
+LEFT tag ON postTag.tagId = tag.id")
 
 class BlogResult {
     @Fields("id,title,authorId")
