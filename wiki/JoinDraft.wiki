@@ -5,42 +5,47 @@
  * `@Join`, `@Fields` 추가
  * `@Column` 에 references 속성 추가
 
-= Sample =
+= 사용법 =
 
-== Inner JOin ==
+ # `@Table` annotation을 갖는 클래스들로 복합 클래스를 생성하고 `@Join` annotation 부여
+ # `@Table` annotation 클래스에 `@Fields` annotation 이용하여 SELECT 대상 필드 지정
+ # foreign key에 해당되는 필드의 `@Column` annotation에 references 속성 추가
+
+= @Join Annotation =
+
+`@Join(<join hint>)`와 같이 쓴다. join hint 가 없으면, `@Join` 클래스에 선언된 순서대로 INNER JOIN 구문 생성한다. 만약, 이전에 선언된 클래스를 참조하는 필드가 없으면 InvalidJoinException이 발생한다.
 
 {{{
 @Join
 class GroupAndUser {
     @Fields("groupKey,groupName")
     Group group;
-    @Fields("roleType")
     GroupUser groupUser;
     @Fields("*")
     User user;
 }
 
-@Table
+@Table("GROUP")
 class Group {
-    @Column(primaryKey=true)
+    @Column(name="group_key",primaryKey=true)
     Long groupKey;
-    @Column
+    @Column("group_name")
     String groupName;
 }
 
-@Table
+@Table("GROUP_USER")
 class GroupUser {
-    @Column(references="Group.groupKey")
+    @Column(name="group_key", references="Group.groupKey")
     Long groupKey;
-    @Column(references="User.userKey")
+    @Column(name="user_key", references="User.userKey")
     Long userKey;
 }
 
-@Table
+@Table("USER")
 class User {
-    @Column(primaryKey=true)
+    @Column(name="user_key", primaryKey=true)
     Long userKey;
-    @Column
+    @Column("user_name")
     String useName;
 }
 
@@ -56,14 +61,12 @@ for (GroupAndUser gau : list) {
 }}}
 
 {{{
-SELECT A.group_key group_groupKey, A.group_name, group_groupName,
-    B.role_type groupUser_roleType,
+SELECT A.group_key group_groupKey, A.group_name group_groupName,
     C.user_key user_userKey, C.user_name user_userName
-FROM NC_GROUP A INNER JOIN NC_GROUP_USER B ON A.group_key = B.group_key INNER JOIN NC_USER C ON B.user_key = C.user_key
+FROM GROUP A INNER JOIN GROUP_USER B ON A.group_key = B.group_key
+    INNER JOIN USER C ON B.user_key = C.user_key
 WHERE A.group_key = 1
 }}}
-
-== Outer Join ==
 
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
