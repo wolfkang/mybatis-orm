@@ -16,15 +16,6 @@
 `@Join(<join hint>)`와 같이 쓴다. join hint 가 없으면, `@Join` 클래스에 선언된 순서대로 INNER JOIN 구문 생성한다. 만약, 이전에 선언된 클래스를 참조하는 필드가 없으면 InvalidJoinException이 발생한다.
 
 {{{
-@Join
-class GroupAndUser {
-    @Fields("groupKey,groupName")
-    Group group;
-    GroupUser groupUser;
-    @Fields("*")
-    User user;
-}
-
 @Table("GROUP")
 class Group {
     @Column(name="group_key",primaryKey=true)
@@ -49,6 +40,15 @@ class User {
     String useName;
 }
 
+@Join
+class GroupAndUser {
+    @Fields("groupKey,groupName")
+    Group group;
+    GroupUser groupUser;
+    @Fields("*")
+    User user;
+}
+
 Group group = new Group();
 group.setGroupKey(1);
 GroupAndUser gu = new GroupAndUser();
@@ -71,14 +71,15 @@ WHERE A.group_key = 1
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
 {{{
+// ON 조건을 생략했을 때, @Column 의 references를 참고하여 ON 조건을 생성
+@Join("blog LEFT JOIN author LEFT JOIN post LEFT JOIN comment LEFT JOIN postTag LEFT JOIN tag")
 
-@Join("blog LEFT author LEFT post LEFT comment LEFT postTag LEFT tag")
-
-@Join("blog LEFT author ON blog.authorId = author.id\
-LEFT post ON blog.id = post.blogId\
-LEFT comment ON post.id = comment.PostId
-LEFT postTag ON postTag.postId = post.id
-LEFT tag ON postTag.tagId = tag.id")
+// ON 조건을 썼을 때
+@Join("blog LEFT JOIN author ON blog.authorId = author.id\
+LEFT JOIN post ON blog.id = post.blogId\
+LEFT JOIN comment ON post.id = comment.PostId
+LEFT JOIN postTag ON postTag.postId = post.id
+LEFT JOIN tag ON postTag.tagId = tag.id")
 
 class BlogResult {
     @Fields("id,title,authorId")
@@ -103,3 +104,32 @@ from Blog B
        left outer join Post_Tag PT on PT.post_id = P.id
        left outer join Tag T on PT.tag_id = T.id
 }}}
+
+SELF JOIN
+
+{{{
+@Table("EMPLOYEE")
+class Employee {
+    @Column(primaryKey=true)
+    Integer employeeId;
+    @Column
+    String name;
+    @Column
+    Integer managerId;
+}
+
+@Join("employee LEFT JOIN manager ON employee.managerId = manager.employeeId")
+class EmployeeManager {
+    @Fields("*")
+    Employee employee;
+    @Fields("employeeId,name")
+    Employee manager;
+}
+}}}
+
+{{{
+SELECT A.employeeId, A.name, A.managerId, B.employeeId, B.name
+FROM EMPLOYEE A LEFT JOIN EMPLOYEE B ON A.managerId = B.employeeId
+}}}
+
+
