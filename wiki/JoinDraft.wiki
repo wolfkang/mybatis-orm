@@ -95,12 +95,13 @@ class BlogResult {
 }}}
 
 {{{
-from Blog B
-       left outer join Author A on B.author_id = A.id
-       left outer join Post P on B.id = P.blog_id
-       left outer join Comment C on P.id = C.post_id
-       left outer join Post_Tag PT on PT.post_id = P.id
-       left outer join Tag T on PT.tag_id = T.id
+SELECT <field list>
+FROM Blog B
+       LEFT JOIN Author A ON B.author_id = A.id
+       LEFT JOIN Post P ON B.id = P.blog_id
+       LEFT JOIN Comment C ON P.id = C.post_id
+       LEFT JOIN Post_Tag PT ON PT.post_id = P.id
+       LEFT JOIN Tag T ON PT.tag_id = T.id
 }}}
 
 SELF JOIN
