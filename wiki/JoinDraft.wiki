@@ -73,10 +73,6 @@ WHERE A.group_key = 1
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
 
 {{{
-// ON 조건을 생략했을 때, @Column 의 references를 참고하여 ON 조건을 생성
-@Join("blog LEFT JOIN author LEFT JOIN post LEFT JOIN comment LEFT JOIN postTag LEFT JOIN tag")
-
-// ON 조건을 썼을 때
 @Join("blog LEFT JOIN author ON blog.authorId = author.id\
 LEFT JOIN post ON blog.id = post.blogId\
 LEFT JOIN comment ON post.id = comment.PostId
