@@ -16,6 +16,8 @@
 `@Join(<join hint>)`와 같이 쓴다. join hint 가 없으면, `@Join` 클래스에 선언된 순서대로 INNER JOIN 구문 생성한다. 만약, 이전에 선언된 클래스를 참조하는 필드가 없으면 InvalidJoinException이 발생한다.
 
 {{{
+// Group 과 User 가 M:N 관계일 때
+
 @Table("GROUP")
 class Group {
     @Column(name="group_key",primaryKey=true)
@@ -24,20 +26,20 @@ class Group {
     String groupName;
 }
 
-@Table("GROUP_USER")
-class GroupUser {
-    @Column(name="group_key", references="Group.groupKey")
-    Long groupKey;
-    @Column(name="user_key", references="User.userKey")
-    Long userKey;
-}
-
 @Table("USER")
 class User {
     @Column(name="user_key", primaryKey=true)
     Long userKey;
     @Column("user_name")
     String useName;
+}
+
+@Table("GROUP_USER")
+class GroupUser {
+    @Column(name="group_key", references="Group.groupKey")
+    Long groupKey;
+    @Column(name="user_key", references="User.userKey")
+    Long userKey;
 }
 
 @Join
@@ -131,5 +133,3 @@ class EmployeeManager {
 SELECT A.employeeId, A.name, A.managerId, B.employeeId, B.name
 FROM EMPLOYEE A LEFT JOIN EMPLOYEE B ON A.managerId = B.employeeId
 }}}
-
-
