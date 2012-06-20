@@ -62,6 +62,8 @@ for (GroupAndUser gau : list) {
 }
 }}}
 
+다음과 같은 유형의 SELECT문 생성
+
 {{{
 SELECT A.group_key group_groupKey, A.group_name group_groupName,
     C.user_key user_userKey, C.user_name user_userName
@@ -94,8 +96,9 @@ class BlogResult {
 }
 }}}
 
+다음과 같은 유형의 FROM절 생성
+
 {{{
-SELECT <field list>
 FROM Blog B
     LEFT JOIN Author A ON B.author_id = A.id
     LEFT JOIN Post P ON B.id = P.blog_id
@@ -104,7 +107,7 @@ FROM Blog B
     LEFT JOIN Tag T ON PT.tag_id = T.id
 }}}
 
-JOIN 테이블들에 @Column의 references 속성이 정의되어 있는 경우엔 ON 구문을 작성하지 않아도 된다.
+JOIN 테이블들에 @Column의 references 속성이 정의되어 있는 경우엔 ON 구문을 생략할 수 있다. ON 구문 생략 시 references 에 따라서 자동으로 ON 구문을 생성한다.
 
 {{{
 @Join("blog LEFT JOIN author LEFT JOIN post LEFT JOIN comment LEFT JOIN postTag LEFT JOIN tag")
