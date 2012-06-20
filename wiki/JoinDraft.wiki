@@ -13,11 +13,10 @@
 
 = @Join Annotation =
 
-`@Join(<join hint>)`와 같이 쓴다. join hint 가 없으면, `@Join` 클래스에 선언된 순서대로 INNER JOIN 구문 생성한다. 만약, 이전에 선언된 클래스를 참조하는 필드가 없으면 InvalidJoinException이 발생한다.
+`@Join(<join hint>)`와 같이 쓴다. join hint 가 없으면, `@Join` 클래스에 선언된 순서대로 INNER JOIN 구문 생성한다. 
 
 {{{
 // Group 과 User 가 M:N 관계일 때
-
 @Table("GROUP")
 class Group {
     @Column(name="group_key",primaryKey=true)
@@ -70,6 +69,19 @@ SELECT A.group_key group_groupKey, A.group_name group_groupName,
 FROM GROUP A INNER JOIN GROUP_USER B ON A.group_key = B.group_key
     INNER JOIN USER C ON B.user_key = C.user_key
 WHERE A.group_key = 1
+}}}
+
+만약, 이전에 선언된 클래스를 참조하는 필드가 없으면 InvalidJoinException이 발생한다.
+
+{{{
+@Join
+class GroupAndUser {
+    @Fields("groupKey,groupName")
+    Group group;
+    @Fields("*")
+    User user;
+    GroupUser groupUser;
+}   // User에서 Group을, 혹은 Group에서 User를 references하는 필드가 없기 때문에 InvalidJoinException 발생
 }}}
 
 http://www.mybatis.org/core/sqlmap-xml.html#Result_Maps
