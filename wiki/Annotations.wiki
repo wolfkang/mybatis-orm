@@ -53,4 +53,4 @@ Public class Hospital {
 }}}
 
 = 주의 사항 =
- # *필드 타입은 primitive type(int, long, boolean, float, double)을 사용하지 말고, wrapper type(Integer, Long, Boolean, Float, Double)을 사용해야 한다.*
+ * *<font color="red">필드 타입은 primitive type(int, long, boolean, float, double) 대신, wrapper class(Integer, Long, Boolean, Float, Double)을 사용해야 한다.</font>*
