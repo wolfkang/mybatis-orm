@@ -4,9 +4,6 @@
 
  * [Configuration]
  * [Annotations]
-
-=== API ===
-
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
