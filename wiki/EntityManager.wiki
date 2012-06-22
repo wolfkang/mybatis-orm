@@ -10,6 +10,8 @@ void update(Object parameter)
 void increment(Object parameter)
 
 void delete(Object parameter)
+void delete(Object parameter, String condition)
+void delete(Object parameter, Condition condition)
 
 <T> T get(T parameter)
 
