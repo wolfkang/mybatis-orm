@@ -2,6 +2,7 @@
 
  * [Configuration]
  * [Annotations]
+ * [Join]
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
