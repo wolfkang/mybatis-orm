@@ -19,7 +19,7 @@ public class PageSqlSource extends AbstractSelectSqlSource {
 		String where = null;
 
 		StringBuilder sb = new StringBuilder(staticSql);
-		where = (query.getCondition() != null) ? query.getCondition() : query.getNotNullColumnEqualFieldAnd();
+		where = (query.getCondition() != null) ? query.getCondition() : query.getNotNullColumnEqualFieldAnd(handler);
 		if (where.length() > 0) {
 			sb.append(" WHERE ").append(where);
 		}
