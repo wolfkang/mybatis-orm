@@ -1,8 +1,10 @@
 #sidebar TableOfContents
 
- * [Welcome]
+=== Guides ===
  * [Configuration]
  * [Annotations]
+
+=== API ===
  * EntityManager
   * [EntityManagerInsert insert()]
   * [EntityManagerUpdate update()]
