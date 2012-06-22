@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.mybatisorm.Condition.Item;
-import org.mybatisorm.annotation.AnnotationUtil;
+import org.mybatisorm.annotation.handler.TableHandler;
 
 public class Query {
 
@@ -250,8 +250,8 @@ public class Query {
 		return sb.toString();
 	}
 	
-	public String getNotNullColumnEqualFieldAnd() {
+	public String getNotNullColumnEqualFieldAnd(TableHandler handler) {
 		return parameter == null ? "" :
-			AnnotationUtil.getNotNullColumnEqualFieldAnd(parameter,PARAMETER_PREFIX);
+			handler.getNotNullColumnEqualFieldAnd(parameter,PARAMETER_PREFIX);
 	}
 }
