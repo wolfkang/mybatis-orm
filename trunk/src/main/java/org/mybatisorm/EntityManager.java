@@ -2,6 +2,7 @@ package org.mybatisorm;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.builder.SqlSourceBuilder;
@@ -9,13 +10,14 @@ import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ResultMap;
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.mapping.SqlSource;
 import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.log4j.Logger;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
-import org.mybatisorm.annotation.AnnotationUtil;
+import org.mybatisorm.annotation.SqlCommand;
+import org.mybatisorm.annotation.handler.SqlCommandAnnotation;
 import org.mybatisorm.exception.InvalidSqlSourceException;
+import org.mybatisorm.sql.builder.SqlBuilder;
 import org.mybatisorm.sql.source.CountSqlSource;
 import org.mybatisorm.sql.source.DeleteSqlSource;
 import org.mybatisorm.sql.source.IncrementSqlSource;
@@ -80,7 +82,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void increment(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(IncrementSqlSource.class, clazz, null);
+		String statementName = addStatement(IncrementSqlSource.class, clazz);
 		sqlSession.update(statementName, parameter);
 	}
 	
@@ -91,7 +93,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void insert(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(insertSqlSourceClass, clazz, null); 
+		String statementName = addStatement(insertSqlSourceClass, clazz); 
 		sqlSession.insert(statementName, parameter);
 	}
 	
@@ -102,7 +104,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void update(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(UpdateSqlSource.class, clazz, null);
+		String statementName = addStatement(UpdateSqlSource.class, clazz);
 		sqlSession.update(statementName, parameter);
 	}
 	
@@ -113,7 +115,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void delete(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(DeleteSqlSource.class, clazz, null);
+		String statementName = addStatement(DeleteSqlSource.class, clazz);
 		sqlSession.delete(statementName, parameter);
 	}
 	
@@ -126,7 +128,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void delete(Object parameter, String condition) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(DeleteSqlSource.class, clazz, null);
+		String statementName = addStatement(DeleteSqlSource.class, clazz);
 		sqlSession.delete(statementName, new Query(parameter,condition,null));
 	}
 	
@@ -139,7 +141,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public void delete(Object parameter, Condition condition) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(DeleteSqlSource.class, clazz, null);
+		String statementName = addStatement(DeleteSqlSource.class, clazz);
 		sqlSession.delete(statementName, new Query(parameter,condition,null));
 	}
 	
@@ -168,7 +170,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	@SuppressWarnings("unchecked")
 	public <T> T get(T parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(loadSqlSourceClass, clazz, clazz); 
+		String statementName = addStatement(loadSqlSourceClass, clazz); 
 		T result = (T)sqlSession.selectOne(statementName, parameter);
 		return result;
 	}
@@ -181,7 +183,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public int count(Object parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(CountSqlSource.class, clazz, Integer.class); 
+		String statementName = addStatement(CountSqlSource.class, clazz); 
 		return (Integer)sqlSession.selectOne(statementName,parameter);
 	}
 	
@@ -194,7 +196,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public int count(Object parameter, String condition) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(CountSqlSource.class, clazz, Integer.class);
+		String statementName = addStatement(CountSqlSource.class, clazz);
 		return (Integer)sqlSession.selectOne(statementName,new Query(parameter,condition,null));
 	}
 	
@@ -206,7 +208,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public int count(Object parameter, Condition condition) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(CountSqlSource.class, clazz, Integer.class);
+		String statementName = addStatement(CountSqlSource.class, clazz);
 		return (Integer)sqlSession.selectOne(statementName,new Query(parameter,condition,null));
 	}
 	
@@ -227,7 +229,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public <T> List<T> list(T parameter) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(ListSqlSource.class, clazz, clazz);
+		String statementName = addStatement(ListSqlSource.class, clazz);
 		List<T> list = sqlSession.selectList(statementName,parameter);
 		return list;
 	}
@@ -251,7 +253,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public <T> List<T> list(T parameter, String orderBy) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(ListSqlSource.class, clazz, clazz);
+		String statementName = addStatement(ListSqlSource.class, clazz);
 		List<T> list = sqlSession.selectList(statementName,new Query(parameter,orderBy));
 		return list;
 	}
@@ -274,14 +276,14 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	 */
 	public <T> List<T> list(T parameter, String condition, String orderBy) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(ListSqlSource.class, clazz, clazz);
+		String statementName = addStatement(ListSqlSource.class, clazz);
 		List<T> list = sqlSession.selectList(statementName, new Query(parameter,condition,orderBy));
 		return list;
 	}
 	
 	public <T> List<T> list(T parameter, Condition condition, String orderBy) {
 		Class<?> clazz = parameter.getClass();
-		String statementName = addStatement(ListSqlSource.class, clazz, clazz);
+		String statementName = addStatement(ListSqlSource.class, clazz);
 		List<T> list = sqlSession.selectList(statementName, new Query(parameter,condition,orderBy));
 		return list;
 	}
@@ -315,7 +317,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		Page<T> page = new Page<T>(pageNumber,rows,count);
 		if (count > (pageNumber-1)*rows) {
 			Class<?> clazz = parameter.getClass();
-			String statementName = addStatement(pageSqlSourceClass,clazz,clazz); 
+			String statementName = addStatement(pageSqlSourceClass,clazz); 
 			page.setList((List<T>)sqlSession.selectList(statementName,
 					new Query(parameter,orderBy,pageNumber,rows)));
 		}
@@ -340,7 +342,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		Page<T> page = new Page<T>(pageNumber,rows,count);
 		if (count > (pageNumber-1)*rows) {
 			Class<?> clazz = parameter.getClass();
-			String statementName = addStatement(pageSqlSourceClass,clazz,clazz); 
+			String statementName = addStatement(pageSqlSourceClass,clazz); 
 			page.setList((List<T>)sqlSession.selectList(statementName,
 					new Query(parameter,condition,orderBy,pageNumber,rows)));
 		}
@@ -365,15 +367,15 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		Page<T> page = new Page<T>(pageNumber,rows,count);
 		if (count > (pageNumber-1)*rows) {
 			Class<?> clazz = parameter.getClass();
-			String statementName = addStatement(pageSqlSourceClass,clazz,clazz); 
+			String statementName = addStatement(pageSqlSourceClass,clazz); 
 			page.setList((List<T>)sqlSession.selectList(statementName,
 					new Query(parameter,condition,orderBy,pageNumber,rows)));
 		}
 		return page;
 	}
 	
-	private synchronized String addStatement(Class<?> sqlSourceClass, Class<?> paramType, Class<?> resultType) {
-		String id = "_" + sqlSourceClass.getSimpleName() + paramType.getSimpleName();
+	private synchronized String addStatement(Class<?> sqlSourceClass, Class<?> type) {
+		String id = "_" + sqlSourceClass.getSimpleName() + type.getSimpleName();
 		if (!configuration.hasStatement(id)) {
 			logger.debug("add a mapped statement, "+id);
 			Constructor<?> constructor = null;
@@ -382,24 +384,27 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 			} catch (Exception e) {
 				throw new InvalidSqlSourceException(e);
 			}
-			SqlSource sqlSource = (SqlSource) BeanUtils.instantiateClass(constructor,sqlSourceParser,paramType);
-			SqlCommandType sqlType = AnnotationUtil.getSqlCommandType(sqlSourceClass);
-			MappedStatement.Builder builder = new MappedStatement.Builder(configuration,id,sqlSource,sqlType);
-			builder.timeout(configuration.getDefaultStatementTimeout());
+			SqlBuilder sqlBuilder = (SqlBuilder) BeanUtils.instantiateClass(constructor,sqlSourceParser,type);
+			SqlCommand sqlCommand = SqlCommandAnnotation.getSqlCommand(sqlSourceClass);
+			SqlCommandType sqlType = sqlCommand.value();
+			MappedStatement.Builder statementBuilder = new MappedStatement.Builder(configuration,id,sqlBuilder,sqlType);
+			statementBuilder.timeout(configuration.getDefaultStatementTimeout());
+			Class<?> resultType = sqlBuilder.getResultType();
 			if (resultType != null) {
 				List<ResultMap> resultMaps = new ArrayList<ResultMap>();
-				ResultMap.Builder inlineResultMapBuilder = new ResultMap.Builder(
+				ResultMap.Builder resultMapBuilder = new ResultMap.Builder(
 						configuration,
-						builder.id() + "-Inline",
+						statementBuilder.id() + "-Inline",
 						resultType,
-						new ArrayList<ResultMapping>());
-				resultMaps.add(inlineResultMapBuilder.build());
-				builder.resultMaps(resultMaps);
+						sqlBuilder.getResultMappingList()
+						);
+				resultMaps.add(resultMapBuilder.build());
+				statementBuilder.resultMaps(resultMaps);
 			}
 			if (SqlCommandType.INSERT.equals(sqlType)) {
-				valueGenerator.generate(builder,id,paramType);
+				valueGenerator.generate(statementBuilder,id,type);
 			}
-			MappedStatement statement = builder.build();
+			MappedStatement statement = statementBuilder.build();
 			configuration.addMappedStatement(statement);
 		}
 		return id;
