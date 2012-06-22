@@ -4,7 +4,7 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.mybatisorm.annotation.SqlCommand;
 import org.mybatisorm.exception.AnnotationNotFoundException;
 
-public class SqlCommandHandler {
+public class SqlCommandAnnotation {
 	public static SqlCommand getSqlCommand(Class<?> sqlSourceClass) {
 		SqlCommand cmd = sqlSourceClass.getAnnotation(SqlCommand.class); 
 		if (cmd == null)
