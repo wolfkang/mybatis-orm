@@ -13,4 +13,6 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Table {
 	String value() default "";
+	String name() default "";
+	NamingRule columnNaming() default NamingRule.NONE;
 }

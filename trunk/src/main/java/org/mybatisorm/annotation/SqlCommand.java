@@ -15,5 +15,4 @@ import org.apache.ibatis.mapping.SqlCommandType;
 @Inherited
 public @interface SqlCommand {
 	SqlCommandType value() default SqlCommandType.UNKNOWN;
-	boolean resultMapping() default false;
 }
