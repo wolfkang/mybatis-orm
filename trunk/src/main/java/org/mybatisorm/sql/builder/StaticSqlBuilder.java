@@ -11,8 +11,8 @@ public class StaticSqlBuilder extends SqlBuilder {
 	
 	private SqlSource sqlSource;
 	
-	public StaticSqlBuilder(SqlSourceBuilder sqlSourceParser) {
-		super(sqlSourceParser);
+	public StaticSqlBuilder(SqlSourceBuilder sqlSourceParser, Class<?> targetClass) {
+		super(sqlSourceParser,targetClass);
 	}
 
 	public BoundSql getBoundSql(Object parameterObject) {

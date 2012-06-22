@@ -10,8 +10,8 @@ public abstract class DynamicSqlBuilder extends SqlBuilder {
 
 	protected String staticSql;
 
-	public DynamicSqlBuilder(SqlSourceBuilder sqlSourceParser) {
-		super(sqlSourceParser);
+	public DynamicSqlBuilder(SqlSourceBuilder sqlSourceParser, Class<?> targetClass) {
+		super(sqlSourceParser,targetClass);
 	}
 
 	public abstract BoundSql getBoundSql(Object parameterObject);
