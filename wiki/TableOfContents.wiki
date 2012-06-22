@@ -1,6 +1,6 @@
 #sidebar TableOfContents
 
-=== Guides ===
+= Guides =
 
  * [Configuration]
  * [Annotations]
