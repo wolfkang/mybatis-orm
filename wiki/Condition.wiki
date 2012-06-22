@@ -67,6 +67,18 @@ condition1, condition2, condition3, condition4 은 모두 같은 조건절을 �
 night_check IN (1, 2, 3)
 </code>
 
+=== IN SUBQUERY === 
+GROUP(Group 클래스)과 USER(User 클래스) 가 M:N 이고, GROUP_USER 통해서 특정 그룹에 속한 사용자 목록 조회
+
+{{{
+User user = new User(); 
+user.setGroupKey(groupKey); 
+Condition condition = new Condition(); 
+condition.add("USER_KEY", "IN", "SELECT USER_KEY FROM GROUP_USER WHERE GROUP_KEY = #{groupKey}");
+
+entityManager.list(user, condition, "USER_NAME ASC"); 
+}}}
+
 == 예3. BETWEEN operator 사용 ==
 {{{
 Condition condition1 = new Condition();
