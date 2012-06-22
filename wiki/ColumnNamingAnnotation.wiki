@@ -9,7 +9,7 @@
 클래스의 필드에 선언된 @Column annontation 의 value 또는 name 을 지정하지 않고, 동일 규칙에 의해 필드명을 컬럼명으로 변환하기 위한 annotation 이다.
 
 || Elements || Description || Type || Default || Database ||
-|| value  || column naming rule || Naming || NamingRule.NONE || All ||
+|| value  || column naming rule || NamingRule || NamingRule.NONE || All ||
 
 = NamingRule =
 
