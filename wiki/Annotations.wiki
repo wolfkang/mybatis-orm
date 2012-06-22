@@ -47,7 +47,51 @@ references 는 JOIN 시 사용이 되며, foreign key 처럼 참조하는 클래
 
 자세한 것은 ColumnNamingAnnotation 을 참고하기 바란다.
 
-*Since:* 0.3 (예정)
+*Since:* 0.3
+
+= `@Join` =
+
+{{{
+@Join
+}}}
+
+테이블 조인을 처리하기 위한 annotation 이다. Join 클래스에 필드로 선언된 클래스들의 매핑 테이블들로 JOIN 절을 생성한다.
+
+{{{
+@Join
+class GroupAndUser {
+    Group group;
+    User user;
+}
+
+테이블 JOIN에 관해서는 [Join]을 참고하기 바란다.
+
+*Since:* 0.3
+
+
+= `@Fields' =
+
+{{{
+@Fields(value)
+}}}
+
+|| Elements || Description || Type || Default || Database ||
+|| value  || 필드 목록 || String || "" || All ||
+
+JOIN 테이블에서 SELECT 할 컬럼에 매핑되는 필드의 목록을 지정한다. 만약, @Join 클래스에서 @Fields 가 선언되지 않은 클래스는 SELECT 에 포함되지 않는다. 그리고, value 가 `"*"`이면, 전체 컬럼이 SELECT 된다.
+
+{{{
+@Join
+class GroupAndUser {
+    @Fields("groupKey,groupName")
+    Group group;
+    @Fields("*")
+    User user;
+}
+
+테이블 JOIN에 관해서는 [Join]을 참고하기 바란다.
+
+*Since:* 0.3
 
 
 = Example =
