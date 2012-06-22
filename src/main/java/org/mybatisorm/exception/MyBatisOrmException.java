@@ -15,18 +15,18 @@
  */
 package org.mybatisorm.exception;
 
-public class InvalidAnnotationException extends MyBatisOrmException {
+public class MyBatisOrmException extends RuntimeException {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4479675503345804198L;
+	private static final long serialVersionUID = -1372925382744696067L;
 
-	public InvalidAnnotationException(String message) {
+	public MyBatisOrmException(String message) {
 		super(message);
 	}
 
-	public InvalidAnnotationException(Throwable cause) {
+	public MyBatisOrmException(Throwable cause) {
 		super(cause);
 	}
 }

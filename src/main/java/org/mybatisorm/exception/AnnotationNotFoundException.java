@@ -15,12 +15,13 @@
  */
 package org.mybatisorm.exception;
 
-public class AnnotationNotFoundException extends RuntimeException {
+public class AnnotationNotFoundException extends MyBatisOrmException {
+
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7957735023334429102L;
 
 	public AnnotationNotFoundException(String message) {
 		super(message);
