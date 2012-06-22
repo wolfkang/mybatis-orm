@@ -17,3 +17,13 @@ entityManager.delete(hospital);
 DELETE FROM hospital
 WHERE name = #{name} AND night_check = #{nightCheck}
 </code>
+
+== void delete(Object parameter, String condition) ==
+
+condition으로 where 절을 생성하여 delete 한다.
+
+== void delete(Object parameter, Condition condition) ==
+
+Condition 객체로 where 절을 생성하여 delete 한다.
+
+
