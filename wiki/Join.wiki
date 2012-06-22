@@ -92,7 +92,7 @@ join hint는 join 이 일어나는 테이블과 컬럼에 매핑되는 클래스
 GROUP G INNER jOIN GROUP_USER GU ON G.group_key = GU.group_key
 }}}
 
-과 같다. GROUP 테이블, GROUP_USER 테이블에 매핑되는 클래스가 Group, GroupUser이고, join 클래스가 GroupAndUser 라고 할 때, join hint 는 GROUP 과 GROUP_USER 대신 GroupAndUser의 group, groupUser 필드를 삽입하고, GROUP.group_key와 GROUP_USER.group_key 대신 Group.groupKey, GroupUser.groupKey 를 삽입한 것이다.
+과 같다. GROUP 테이블, GROUP_USER 테이블에 매핑되는 클래스가 Group, GroupUser이고, join 클래스가 GroupAndUser 라고 할 때, join hint 는 GROUP 과 GROUP_USER 대신 GroupAndUser의 group, groupUser 필드를 삽입하고, GROUP.group_key와 GROUP_USER.group_key 대신 group.groupKey, groupUser.groupKey 를 삽입한 것이다.
 
 {{{
 group INNER JOIN groupUser ON group.groupKey = groupUser.groupKey
@@ -106,7 +106,6 @@ LEFT JOIN post ON blog.id = post.blogId\
 LEFT JOIN comment ON post.id = comment.PostId
 LEFT JOIN postTag ON postTag.postId = post.id
 LEFT JOIN tag ON postTag.tagId = tag.id")
-
 class BlogResult {
     @Fields("id,title,authorId")
     Blog blog;
@@ -122,15 +121,15 @@ class BlogResult {
 }
 }}}
 
-다음과 같은 유형의 FROM절 생성
+다음과 같은 join 구문을 생성한다.
 
 {{{
-FROM Blog B
-    LEFT JOIN Author A ON B.author_id = A.id
-    LEFT JOIN Post P ON B.id = P.blog_id
-    LEFT JOIN Comment C ON P.id = C.post_id
-    LEFT JOIN Post_Tag PT ON PT.post_id = P.id
-    LEFT JOIN Tag T ON PT.tag_id = T.id
+BLOG blog_
+    LEFT JOIN AUTHOR author_ ON blog_.author_id = author_.id
+    LEFT JOIN POST post_ ON blog_.id = post_.blog_id
+    LEFT JOIN COMMENT comment_ ON post_.id = comment_.post_id
+    LEFT JOIN POST_TAG postTag_ ON postTag_.post_id = post_.id
+    LEFT JOIN TAG tag_ ON postTag_.tag_id = tag_.id
 }}}
 
 JOIN 테이블들에 @Column의 references 속성이 정의되어 있는 경우엔 ON 구문을 생략할 수 있다. ON 구문 생략 시 references 에 따라서 자동으로 ON 구문을 생성한다. ON 구문이 없고, references도 지정되어 있지 않으면, InvalidJoinException이 발생한다.
@@ -145,12 +144,12 @@ JOIN 테이블들에 @Column의 references 속성이 정의되어 있는 경우�
 JoinHandler handler = new JoinHandler(BlogResult.class);
 System.out.println(handler.getName());
 // 출력 결과
-Blog blog_
-    LEFT JOIN Author author_ ON blog_.author_id = author_.id
-    LEFT JOIN Post post_ ON blog_.id = post_.blog_id
-    LEFT JOIN Comment comment_ ON post_.id = comment_.post_id
-    LEFT JOIN Post_Tag postTag_ ON postTag_.post_id = post_.id
-    LEFT JOIN Tag tag_ ON postTag_.tag_id = tag_.id
+BLOG blog_
+    LEFT JOIN AUTHOR author_ ON blog_.author_id = author_.id
+    LEFT JOIN POST post_ ON blog_.id = post_.blog_id
+    LEFT JOIN COMMENT comment_ ON post_.id = comment_.post_id
+    LEFT JOIN POST_TAG postTag_ ON postTag_.post_id = post_.id
+    LEFT JOIN TAG tag_ ON postTag_.tag_id = tag_.id
 }}}
 
 다음은 SELF JOIN의 예이다.
