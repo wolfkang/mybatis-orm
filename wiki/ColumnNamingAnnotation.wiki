@@ -11,16 +11,17 @@
 || Elements || Description || Type || Default || Database ||
 || value  || column naming rule || Naming || NamingRule.NONE || All ||
 
-NamingRule 상수값
+= NamingRule =
 
-|| NONE || naming 규칙을 지정하지 않음 ||
-|| UPPERCASE || 대문자 사용 ||
-|| LOWERCASE || 소문자 사용 ||
-|| UNDERSCORE || underscore "_" 사용하여 단어 구분 ||
-|| UPPERCASE_UNDERSCORE || 대문자와 underscore 사용 ||
-|| LOWERCASE_UNDERSCORE || 소문자와 underscore 사용 ||
+|| 상수 || 설명 || 필드명 예 || 생성 컬럼명 ||
+|| NONE || naming 규칙을 지정하지 않음 || || ||
+|| UPPERCASE || 대문자 사용 || parentGroupKey || PARENTGROUPKEY ||
+|| LOWERCASE || 소문자 사용 || parentGroupKey || parentgroupkey ||
+|| UNDERSCORE || camelCase 필드명을 underscore `"_"` 사용하여 단어 구분 || parentGroupKey<br>groupID || `parent_Group_Key`<br>`group_ID` ||
+|| UPPERCASE_UNDERSCORE || 대문자와 underscore 사용 || parentGroupKey || PARENT_GROUP_KEY ||
+|| LOWERCASE_UNDERSCORE || 소문자와 underscore 사용 || parentGroupKey || parent_group_key ||
 
-`@ColumnNaming` 에 의해 생성되는 컬럼명보다 `@Column'의 name 이 우선한다. 즉, `@ColumnNaming` 이 선언되어 있더라도, `@Column`에 value 또는 name 이 지정되어 있으면, `@Column`의 컬럼명을 사용한다.
+`@ColumnNaming` 에 의해 생성되는 컬럼명보다 `@Column`의 column name 이 우선한다. 즉, `@ColumnNaming` 이 선언되어 있더라도, `@Column`에 value 또는 name 이 지정되어 있으면, `@Column`의 컬럼명을 사용한다.
 
 = Example =
 
