@@ -45,7 +45,7 @@ references 는 JOIN 시 사용이 되며, foreign key 처럼 참조하는 클래
 || Elements || Description || Type || Default || Database ||
 || value  || column naming rule || NamingRule || NamingRule.NONE || All ||
 
-자세한 것은 ColumnNamingAnnotation 을 참고하기 바란다.
+자세한 것은 ColumnNaming 을 참고하기 바란다.
 
 *Since:* 0.3
 
