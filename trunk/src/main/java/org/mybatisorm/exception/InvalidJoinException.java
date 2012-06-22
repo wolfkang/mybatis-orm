@@ -15,11 +15,12 @@
  */
 package org.mybatisorm.exception;
 
-public class InvalidJoinException extends RuntimeException {
+public class InvalidJoinException extends MyBatisOrmException {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1905046933667179822L;
 
 	public InvalidJoinException(String message) {
 		super(message);

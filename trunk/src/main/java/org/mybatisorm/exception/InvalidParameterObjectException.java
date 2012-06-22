@@ -15,7 +15,7 @@
  */
 package org.mybatisorm.exception;
 
-public class InvalidParameterObjectException extends RuntimeException {
+public class InvalidParameterObjectException extends MyBatisOrmException {
 
 	/**
 	 * 

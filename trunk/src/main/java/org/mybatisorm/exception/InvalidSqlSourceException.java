@@ -15,11 +15,12 @@
  */
 package org.mybatisorm.exception;
 
-public class InvalidSqlSourceException extends RuntimeException {
+public class InvalidSqlSourceException extends MyBatisOrmException {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1858869307109406894L;
 
 	public InvalidSqlSourceException(String message) {
 		super(message);
