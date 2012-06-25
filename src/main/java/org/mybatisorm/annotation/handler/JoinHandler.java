@@ -383,7 +383,6 @@ public class JoinHandler extends TableHandler {
 		return list;
 	}
 	
-	
 	/*
 	 * Oracle has a limit of 30 characters for names.
 	 */
