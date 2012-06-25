@@ -42,6 +42,10 @@ import org.mybatisorm.util.StringUtil;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
+/**
+ * @author k
+ *
+ */
 public class JoinHandler extends TableHandler {
 
 	public JoinHandler(Class<?> clazz) {
@@ -323,12 +327,14 @@ public class JoinHandler extends TableHandler {
 
 	public String getColumnAsFieldComma() {
 		StringBuilder sb = new StringBuilder();
+		int index = 0;
 		for (PropertyField property : getPropertyFields()) {
 			for (Field field : property.fieldList) {
 				if (sb.length() > 0)
 					sb.append(", ");
 				sb.append(property.name).append("_.").append(ColumnAnnotation.getName(field))
-					.append(" ").append(property.name).append("_").append(field.getName());
+					.append(" ").append(getAlias(property.name,field.getName(),index++));
+					//property.name).append("_").append(field.getName());
 			}
 		}
 		return sb.toString();
@@ -365,15 +371,28 @@ public class JoinHandler extends TableHandler {
 	
 	public List<ResultMapping> getResultMappingList(Configuration configuration) {
 		List<ResultMapping> list = new ArrayList<ResultMapping>();
+		int index = 0;
 		for (PropertyField property : getPropertyFields()) {
 			for (Field field : property.fieldList) {
 				list.add((new ResultMapping.Builder(configuration,
 						property.name+"."+field.getName(),
-						property.name+"_"+field.getName(),
+						getAlias(property.name,field.getName(),index++),
 						field.getType())).build());
 			}
 		}
 		return list;
+	}
+	
+	
+	/*
+	 * Oracle has a limit of 30 characters for names.
+	 */
+	private String getAlias(String property, String field, int index) {
+		String alias = property+"_"+field;
+		if (alias.length() <= 30)
+			return alias;
+		String s = StringUtil.convertTo26Digit(index);
+		return alias.substring(0, 29-s.length()) + "_" + s;
 	}
 
 	static class PropertyField {
