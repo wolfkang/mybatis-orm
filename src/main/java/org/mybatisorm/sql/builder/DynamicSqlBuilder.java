@@ -32,6 +32,7 @@ public abstract class DynamicSqlBuilder extends SqlBuilder {
 	public abstract BoundSql getBoundSql(Object parameterObject);
 
 	protected BoundSql getBoundSql(String sql, Object parameterObject) {
+		logger.debug(sql);
 		return getSqlSourceParser().parse(sql, parameterObject.getClass()).getBoundSql(parameterObject);
 	}
 
