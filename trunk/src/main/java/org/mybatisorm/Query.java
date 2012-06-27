@@ -28,7 +28,7 @@ import org.mybatisorm.annotation.handler.TableHandler;
 
 public class Query {
 
-	private static final String PARAMETER_RE = "#\\{([0-9a-zA-Z_]+)\\}";
+	private static final String PARAMETER_RE = "#\\{([0-9a-zA-Z_\\.]+)\\}";
 
 	private static final Pattern PARAMETER_PATTERN = Pattern.compile(PARAMETER_RE);
 	
@@ -118,7 +118,10 @@ public class Query {
 	}
 	private void setCondition(String condition) {
 		if (condition != null)
-			this.condition = condition.replaceAll(PARAMETER_RE, CONDITION_REPLACEMENT);
+			this.condition = replaceParam(condition);
+	}
+	private static String replaceParam(String value) {
+		return value.replaceAll(PARAMETER_RE, CONDITION_REPLACEMENT);
 	}
 	public int getStart() {
 		return start;
@@ -156,12 +159,14 @@ public class Query {
 	private void setCondition(Condition condition) {
 		StringBuilder sb = new StringBuilder();
 		Iterator<Item> it = condition.iterator();
+		String operator = null;
 		while (it.hasNext()) {
 			Item item = it.next();
+			operator = item.getOperator();
 			sb.append(item.getColumn()).append(" ").append(item.getOperator()).append(" ");
-			if ("IN".equalsIgnoreCase(item.getOperator()) || "NOT IN".equalsIgnoreCase(item.getOperator())) {
+			if ("IN".equalsIgnoreCase(operator) || "NOT IN".equalsIgnoreCase(operator)) {
 				sb.append("(").append(addProperties(item.getValue(),",")).append(")");
-			} else if ("BETWEEN".equalsIgnoreCase(item.getOperator())) {
+			} else if ("BETWEEN".equalsIgnoreCase(operator)) {
 				sb.append(addProperties(item.getValue()," AND "));
 			} else {
 				sb.append(addProperty(item.getValue()));
@@ -169,14 +174,14 @@ public class Query {
 			if (it.hasNext())
 				sb.append(condition.getSeperator());
 		}
-		setCondition(sb.toString());
+		this.condition = sb.toString();
 	}
 	
 	private String addProperty(Object value) {
 		if (value instanceof String) {
 			Matcher m = PARAMETER_PATTERN.matcher((String)value);
 			if (m.find())
-				return (String)value;
+				return replaceParam((String)value);
 		}
 		if (properties == null)
 			properties = new HashMap<String,Object>();
@@ -268,5 +273,11 @@ public class Query {
 	public String getNotNullColumnEqualFieldAnd(TableHandler handler) {
 		return parameter == null ? "" :
 			handler.getNotNullColumnEqualFieldAnd(parameter,PARAMETER_PREFIX);
+	}
+	
+	public static void main(String[] args) {
+		Matcher m = PARAMETER_PATTERN.matcher("'%' || #{board.messageId} || '%'");
+//		Matcher m = PARAMETER_PATTERN.matcher("'%' || #{name} || '%'#{board.messageId}");
+		System.out.println(m.find());
 	}
 }
