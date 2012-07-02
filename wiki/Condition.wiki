@@ -12,8 +12,8 @@ seperator 구분자로 기본 객체를 생성한다. seperator는 Seperator.AND
 
 = Methods =
 
-== void add(String column, String operator, Object value) ==
-조건문을 추가한다. column은 조건문의 컬럼명, operator는 연산자, value는 컬럼값이다.
+== void add(String field, String operator, Object value) ==
+조건문을 추가한다. field는 파라미터 객체의 필드명, operator는 연산자, value는 컬럼값이다. 쿼리 실행 시에 파라미터 객체의 필드명은 매핑 컬럼명으로 치환된다.
 
 operator는 =, <, >, <>, IN, BETWEEN, LIKE를 쓸 수 있다.
 
@@ -28,15 +28,17 @@ operator 가 "IN"이면, value는 ( ) 안에 포함된다. 이 때, value가 arr
 
 operator가 "BETWEEN"이면, value는 *? AND ?* 와 같은 형태로 조건절에 삽입된다.
 
-== Iterator iterator() ==
-조건문을 Iterator로 접근한다.
+== void add(Condition condition) ==
+
+서브 조건문을 추가한다.
+
 
 = Examples =
 
 == 예1 ==
 {{{
 Condition condition = new Condition();
-condition.add("night_check", ">", "#{nightCheck}");
+condition.add("nightCheck", ">", "#{nightCheck}");
 condition.add("name","=","비타민");
 }}}
 생성되는 조건절
@@ -47,20 +49,20 @@ night_check > #{nightCheck} AND name = '비타민'
 == 예2. IN operator 사용 ==
 {{{
 Condition condition1 = new Condition();
-condition1.add("night_check", "IN", new int[] {1,2,3});
+condition1.add("nightCheck", "IN", new int[] {1,2,3});
 
 Condition condition2 = new Condition();
-condition2.add("night_check", "IN", new Integer[] {1,2,3});
+condition2.add("nightCheck", "IN", new Integer[] {1,2,3});
 
 Condition condition3 = new Condition();
-condition3.add("night_check", "IN", 1, 2, 3);
+condition3.add("nightCheck", "IN", 1, 2, 3);
 
 Condition condition4 = new Condition();
 ArrayList list = new ArrayList();
 list.add(1);
 list.add(2);
 list.add(3);
-condition4.add("night_check", "IN", list);
+condition4.add("nightCheck", "IN", list);
 }}}
 condition1, condition2, condition3, condition4 은 모두 같은 조건절을 생성
 <code language="sql">
@@ -74,7 +76,7 @@ GROUP(Group 클래스)과 USER(User 클래스) 가 M:N 이고, GROUP_USER 통해
 User user = new User(); 
 user.setGroupKey(groupKey); 
 Condition condition = new Condition(); 
-condition.add("USER_KEY", "IN", "SELECT USER_KEY FROM GROUP_USER WHERE GROUP_KEY = #{groupKey}");
+condition.add("userKey", "IN", "SELECT USER_KEY FROM GROUP_USER WHERE GROUP_KEY = #{groupKey}");
 
 entityManager.list(user, condition, "USER_NAME ASC"); 
 }}}
@@ -82,10 +84,10 @@ entityManager.list(user, condition, "USER_NAME ASC");
 == 예3. BETWEEN operator 사용 ==
 {{{
 Condition condition1 = new Condition();
-condition.add("night_check", "BETWEEN", new Integer[] {1,10});
+condition.add("nightCheck", "BETWEEN", new Integer[] {1,10});
 
 Condition condition2 = new Condition();
-condition.add("night_check", "BETWEEN", 1, 10);
+condition.add("nightCheck", "BETWEEN", 1, 10);
 }}}
 생성되는 조건절
 <code language="sql">
@@ -106,11 +108,28 @@ condition.add("name", "LIKE", "'%' || #{name} || '%'");
 == 예5. 구분자를 Seperator.OR 로 지정 ==
 {{{
 Condition condition = new Condition(Seperator.OR);
-condition.add("night_check", ">", "#{nightCheck}");
+condition.add("nightCheck", ">", "#{nightCheck}");
 condition.add("name","=","비타민");
 condition.add("hospitalid","=",1234);
 }}}
 생성되는 조건절
 <code language="sql">
 night_check = #{nightCheck} OR name = '비타민' OR hosptalid = 1234
+</code>
+
+== 예6. 서브 조건문 ==
+{{{
+Condition condition = new Condition(Seperator.AND);
+condition.add("nightCheck", ">", "#{nightCheck}");
+
+Condition subcon = new Condition(Seperator.OR);
+subcon.add("name","=","비타민");
+subcon.add("hospitalid","=",1234);
+
+condition.add(subcon); 
+}}}
+
+생성되는 조건절
+<code language="sql">
+night_check = #{nightCheck} AND (name = '비타민' OR hosptalid = 1234)
 </code>
