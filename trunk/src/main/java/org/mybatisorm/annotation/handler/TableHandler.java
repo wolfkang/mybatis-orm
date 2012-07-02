@@ -292,4 +292,12 @@ public class TableHandler {
 		}
 		return rfields;
 	}
+
+	public String findColumnName(String fieldName) {
+		String columnName = null;
+		try {
+			columnName = ColumnAnnotation.getName(targetClass.getDeclaredField(fieldName)); 
+		} catch(Exception e) {}
+		return columnName;
+	}
 }

@@ -487,5 +487,19 @@ public class JoinHandler extends TableHandler {
 			return text;
 		}
 	}
-	
+
+	public String findColumnName(String fieldName) {
+		String[] fieldNames = fieldName.split("\\.");
+		if (fieldNames.length != 2)
+			return fieldName;
+		Field field; 
+		try {
+			field = targetClass.getDeclaredField(fieldNames[0]);
+		} catch(Exception e) {
+			return null;
+		}
+		String columnName = HandlerFactory.getHandler(field.getType()).findColumnName(fieldNames[1]);
+		
+		return columnName != null ? field.getName() + "_." + columnName : null;
+	}
 }
