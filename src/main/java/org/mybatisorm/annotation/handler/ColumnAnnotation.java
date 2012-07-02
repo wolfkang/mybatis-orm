@@ -26,6 +26,9 @@ public class ColumnAnnotation {
 	private static Hashtable<Field,String> nameTable = new Hashtable<Field,String>();
 	
 	public static synchronized String getName(Column column, Field field) {
+		if (column == null)
+			return null;
+		
 		String name = nameTable.get(field);
 		if (name != null)
 			return name;

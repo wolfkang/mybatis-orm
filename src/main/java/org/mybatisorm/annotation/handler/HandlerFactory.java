@@ -40,4 +40,8 @@ public class HandlerFactory {
 		handlerMap.put(clazz, handler);
 		return handler;
 	}
+
+	public static TableHandler getHandler(Object parameter) {
+		return getHandler(parameter.getClass());
+	}
 }

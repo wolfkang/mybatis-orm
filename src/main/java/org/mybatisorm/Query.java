@@ -39,7 +39,7 @@ public class Query {
 	private static Logger logger = Logger.getLogger(Query.class);
 	
 	private String orderBy;
-	private String condition;
+	private Condition condition;
 	private Object parameter;
 	private Map<String,Object> properties;
 	
@@ -69,7 +69,7 @@ public class Query {
 	public Query(Object parameter, Condition condition, String orderBy) {
 		this.parameter = parameter;
 		this.orderBy = orderBy;
-		setCondition(condition);
+		this.condition = condition;
 	}
 	
 	public Query(Object parameter, String orderBy, int pageNumber, int rows) {
@@ -92,7 +92,7 @@ public class Query {
 		this.orderBy = orderBy;
 		this.pageNumber = pageNumber;
 		this.rows = rows;
-		setCondition(condition);
+		this.condition = condition;
 	}
 	
 	public String getOrderBy() {
@@ -111,14 +111,14 @@ public class Query {
 		this.parameter = parameter;
 	}
 	public String getCondition() {
-		return condition;
+		return condition.build(this);
 	}
 	public boolean hasCondition() {
 		return condition != null;
 	}
 	private void setCondition(String condition) {
-		if (condition != null)
-			this.condition = replaceParam(condition);
+		this.condition = new Condition();
+		this.condition.add(condition);
 	}
 	private static String replaceParam(String value) {
 		return value.replaceAll(PARAMETER_RE, CONDITION_REPLACEMENT);
@@ -156,28 +156,7 @@ public class Query {
 		this.properties = properties;
 	}
 	
-	private void setCondition(Condition condition) {
-		StringBuilder sb = new StringBuilder();
-		Iterator<Item> it = condition.iterator();
-		String operator = null;
-		while (it.hasNext()) {
-			Item item = it.next();
-			operator = item.getOperator();
-			sb.append(item.getColumn()).append(" ").append(item.getOperator()).append(" ");
-			if ("IN".equalsIgnoreCase(operator) || "NOT IN".equalsIgnoreCase(operator)) {
-				sb.append("(").append(addProperties(item.getValue(),",")).append(")");
-			} else if ("BETWEEN".equalsIgnoreCase(operator)) {
-				sb.append(addProperties(item.getValue()," AND "));
-			} else {
-				sb.append(addProperty(item.getValue()));
-			}
-			if (it.hasNext())
-				sb.append(condition.getSeperator());
-		}
-		this.condition = sb.toString();
-	}
-	
-	private String addProperty(Object value) {
+	public String addProperty(Object value) {
 		if (value instanceof String) {
 			Matcher m = PARAMETER_PATTERN.matcher((String)value);
 			if (m.find())
@@ -188,86 +167,6 @@ public class Query {
 		int index = properties.size();
 		properties.put(String.valueOf(index),value);
 		return "#{properties."+index+"}";
-	}
-	
-	private String addProperties(Object values, String delimiter) {
-		if (values.getClass().isArray()) {
-			String name = values.getClass().getComponentType().getName();
-			if ("int".equals(name)) {
-				return addProperties((int[])values,delimiter);
-			} else if ("long".equals(name)) {
-				return addProperties((long[])values,delimiter);
-			} else if ("float".equals(name)) {
-				return addProperties((float[])values,delimiter);
-			} else if ("double".equals(name)) {
-				return addProperties((double[])values,delimiter);
-			}
-			return addProperties((Object[])values,delimiter);
-		}
-		return (values instanceof Collection) ? addProperties((Collection<?>)values,delimiter) :
-				addProperty(values);
-	}
-	
-	private String addProperties(int[] values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(delimiter);
-			sb.append(addProperty(values[i]));
-		}
-		return sb.toString();
-	}
-	
-	private String addProperties(long[] values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(delimiter);
-			sb.append(addProperty(values[i]));
-		}
-		return sb.toString();
-	}
-	
-	private String addProperties(float[] values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(delimiter);
-			sb.append(addProperty(values[i]));
-		}
-		return sb.toString();
-	}
-	
-	private String addProperties(double[] values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(delimiter);
-			sb.append(addProperty(values[i]));
-		}
-		return sb.toString();
-	}
-	
-	private String addProperties(Object[] values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < values.length; i++) {
-			if (i > 0)
-				sb.append(delimiter);
-			sb.append(addProperty(values[i]));
-		}
-		return sb.toString();
-	}
-	
-	private String addProperties(Collection<?> values, String delimiter) {
-		StringBuilder sb = new StringBuilder();
-		Iterator<?> it = values.iterator();
-		while(it.hasNext()) {
-			Object o = it.next();
-			sb.append(addProperty(o));
-			if (it.hasNext())
-				sb.append(delimiter);
-		}
-		return sb.toString();
 	}
 	
 	public String getNotNullColumnEqualFieldAnd(TableHandler handler) {
