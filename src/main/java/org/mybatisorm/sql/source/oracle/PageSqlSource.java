@@ -49,7 +49,7 @@ public class PageSqlSource extends DynamicSqlBuilder {
 		}
 		sb.append("ROWNUM <= #{end} ");
 		
-		if (query.makeOrderBy() != null)
+		if (query.hasOrderBy())
 			sb.append(" ORDER BY ").append(query.makeOrderBy());
 
 		sb.append(") WHERE rnum >= #{start}");

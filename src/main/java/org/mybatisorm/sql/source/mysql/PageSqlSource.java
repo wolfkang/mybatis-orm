@@ -38,7 +38,7 @@ public class PageSqlSource extends AbstractSelectSqlSource {
 		if (where.length() > 0) {
 			sb.append(" WHERE ").append(where);
 		}
-		if (query.makeOrderBy() != null)
+		if (query.hasOrderBy())
 			sb.append(" ORDER BY ").append(query.makeOrderBy());
 
 		query.setStart((query.getPageNumber()-1)*query.getRows());
