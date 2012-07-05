@@ -16,23 +16,18 @@
 package org.mybatisorm.annotation.handler;
 
 import java.lang.reflect.Field;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import org.apache.ibatis.mapping.ResultMapping;
 import org.apache.ibatis.session.Configuration;
 import org.mybatisorm.annotation.Column;
-import org.mybatisorm.annotation.Join;
 import org.mybatisorm.annotation.Table;
-import org.mybatisorm.exception.AnnotationNotFoundException;
-import org.mybatisorm.exception.InvalidAnnotationException;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -300,4 +295,117 @@ public class TableHandler {
 		} catch(Exception e) {}
 		return columnName;
 	}
+	
+	public String makeOrderBy(String orderBy) {
+		QueryTokenizer tokenizer = new QueryTokenizer(orderBy);
+		QueryTokenizer.TokenType type;
+		String text;
+		StringBuilder sb = new StringBuilder();
+		
+		while ((type = tokenizer.next()) != QueryTokenizer.TokenType.EOS) {
+			text = tokenizer.getText();
+			switch (type) {
+			case IDENTIFIER:
+				String name = findColumnName(text);
+				if (name == null)
+					sb.append(text);
+				else
+					sb.append(name);
+				break;
+			default:
+				sb.append(text);
+				break;
+			}
+		}
+
+		return sb.toString();
+	}
+	
+	
+	static class QueryTokenizer {
+
+		public enum TokenType { NONE, IDENTIFIER, CLASS_FIELD, ETC, ON, WS, EOS };
+		
+		private static Set<String> KEYWORDS = new HashSet<String>(Arrays.asList(new String[]{
+				"JOIN", "INNER", "OUTER", "LEFT", "RIGHT", "FULL", "CROSS", "NATURAL", "DESC", "ASC"}));
+		
+		private StringBuilder sb;
+		
+		private String text;
+		
+		private CharacterIterator it;
+		
+		private char ch;
+		
+		private TokenType type;
+		
+		public QueryTokenizer(String joinHint) {
+			it = new StringCharacterIterator(joinHint.trim());
+			ch = it.first();
+			sb = new StringBuilder();
+			text = "";
+			type = TokenType.NONE;
+		}
+		
+		public TokenType next() {
+			if (type == TokenType.EOS)
+				return type;
+			
+			for (; ch != CharacterIterator.DONE; ch=it.next()) {
+				if (Character.isJavaIdentifierPart(ch)) {
+					if (type == TokenType.WS || type == TokenType.ETC)
+						return transit(TokenType.IDENTIFIER);
+					if (type != TokenType.CLASS_FIELD)
+						type = TokenType.IDENTIFIER;
+					sb.append(ch);
+				} else if (ch == '.') {
+					if (type == TokenType.IDENTIFIER) {
+						type = TokenType.CLASS_FIELD;
+						sb.append(ch);
+					} else {
+						return transit(TokenType.ETC);
+					}
+				} else if (Character.isWhitespace(ch)) {
+					if (type != TokenType.WS)
+						return transit(TokenType.WS);
+					type = TokenType.WS;
+					sb.append(ch);
+				} else {
+					if (type != TokenType.ETC)
+						return transit(TokenType.ETC);
+					type = TokenType.ETC;
+					sb.append(ch);
+				}
+			}
+			
+			TokenType oldType = type;
+			type = TokenType.EOS;
+			text = sb.toString();
+			return oldType;
+		}
+		
+		private TokenType transit(TokenType newType) {
+			text = sb.toString();
+			sb.setLength(0);
+			sb.append(ch);
+			ch = it.next();
+
+			if (type == TokenType.IDENTIFIER) {
+				String upper = text.toUpperCase();
+				if ("ON".equals(upper))
+					type = TokenType.ON;
+				else if (KEYWORDS.contains(upper))
+					type = TokenType.ETC;
+			}
+			TokenType oldType = type;
+			type = newType;
+			return oldType;
+		}
+
+		public String getText() {
+			return text;
+		}
+	}
+
+
 }

@@ -97,14 +97,14 @@ public class JoinHandler extends TableHandler {
 				throw new InvalidAnnotationException("The references for join has not been found");
 		}
 		
-		JoinHintTokenizer tokenizer = new JoinHintTokenizer(joinHint);
-		JoinHintTokenizer.TokenType type;
+		QueryTokenizer tokenizer = new QueryTokenizer(joinHint);
+		QueryTokenizer.TokenType type;
 		String text;
 		boolean onRequired = false;
 		
 		// processing the first class
 		type = tokenizer.next();
-		if (type != JoinHintTokenizer.TokenType.CLASS)
+		if (type != QueryTokenizer.TokenType.IDENTIFIER)
 			throw new InvalidJoinException("The join hint must start with the property name.");
 		text = tokenizer.getText();
 		field = getField(text);
@@ -113,10 +113,10 @@ public class JoinHandler extends TableHandler {
 		handler = HandlerFactory.getHandler(clazz);
 		sb.append(handler.getName()).append(" ").append(text).append("_");
 
-		while ((type = tokenizer.next()) != JoinHintTokenizer.TokenType.EOS) {
+		while ((type = tokenizer.next()) != QueryTokenizer.TokenType.EOS) {
 			text = tokenizer.getText();
 			switch (type) {
-			case CLASS:
+			case IDENTIFIER:
 				field = getField(text);
 				fieldList.add(field);
 				clazz = field.getType();
@@ -403,95 +403,10 @@ public class JoinHandler extends TableHandler {
 		}
 	}
 
-	static class JoinHintTokenizer {
-
-		public enum TokenType { NONE, CLASS, CLASS_FIELD, ETC, ON, WS, EOS };
-		
-		private static Set<String> KEYWORDS = new HashSet<String>(Arrays.asList(new String[]{
-				"JOIN", "INNER", "OUTER", "LEFT", "RIGHT", "FULL", "CROSS", "NATURAL"}));
-		
-		private StringBuilder sb;
-		
-		private String text;
-		
-		private CharacterIterator it;
-		
-		private char ch;
-		
-		private TokenType type;
-		
-		public JoinHintTokenizer(String joinHint) {
-			it = new StringCharacterIterator(joinHint.trim());
-			ch = it.first();
-			sb = new StringBuilder();
-			text = "";
-			type = TokenType.NONE;
-		}
-		
-		public TokenType next() {
-			if (type == TokenType.EOS)
-				return type;
-			
-			for (; ch != CharacterIterator.DONE; ch=it.next()) {
-				if (Character.isJavaIdentifierPart(ch)) {
-					if (type == TokenType.WS || type == TokenType.ETC)
-						return transit(TokenType.CLASS);
-					if (type != TokenType.CLASS_FIELD)
-						type = TokenType.CLASS;
-					sb.append(ch);
-				} else if (ch == '.') {
-					if (type == TokenType.CLASS) {
-						type = TokenType.CLASS_FIELD;
-						sb.append(ch);
-					} else {
-						return transit(TokenType.ETC);
-					}
-				} else if (Character.isWhitespace(ch)) {
-					if (type != TokenType.WS)
-						return transit(TokenType.WS);
-					type = TokenType.WS;
-					sb.append(ch);
-				} else {
-					if (type != TokenType.ETC)
-						return transit(TokenType.ETC);
-					type = TokenType.ETC;
-					sb.append(ch);
-				}
-			}
-			
-			TokenType oldType = type;
-			type = TokenType.EOS;
-			text = sb.toString();
-			return oldType;
-		}
-		
-		private TokenType transit(TokenType newType) {
-			text = sb.toString();
-			sb.setLength(0);
-			sb.append(ch);
-			ch = it.next();
-
-			if (type == TokenType.CLASS) {
-				String upper = text.toUpperCase();
-				if ("ON".equals(upper))
-					type = TokenType.ON;
-				else if (KEYWORDS.contains(upper))
-					type = TokenType.ETC;
-			}
-			TokenType oldType = type;
-			type = newType;
-			return oldType;
-		}
-
-		public String getText() {
-			return text;
-		}
-	}
-
 	public String findColumnName(String fieldName) {
 		String[] fieldNames = fieldName.split("\\.");
 		if (fieldNames.length != 2)
-			return fieldName;
+			return null;
 		Field field; 
 		try {
 			field = targetClass.getDeclaredField(fieldNames[0]);
@@ -502,4 +417,29 @@ public class JoinHandler extends TableHandler {
 		
 		return columnName != null ? field.getName() + "_." + columnName : null;
 	}
+	
+	public String makeOrderBy(String orderBy) {
+		StringBuilder sb = new StringBuilder();
+		QueryTokenizer tokenizer = new QueryTokenizer(orderBy);
+		QueryTokenizer.TokenType type;
+		String text;
+		
+		while ((type = tokenizer.next()) != QueryTokenizer.TokenType.EOS) {
+			text = tokenizer.getText();
+			switch (type) {
+			case CLASS_FIELD:
+				String name = findColumnName(text);
+				if (name == null)
+					sb.append(text);
+				else
+					sb.append(name);
+				break;
+			default:
+				sb.append(text);
+				break;
+			}
+		}
+		return sb.toString();
+	}
+
 }

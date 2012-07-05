@@ -37,8 +37,8 @@ public class ListSqlSource extends AbstractSelectSqlSource {
 			if (where != null && where.length() > 0) {
 				sb.append(" WHERE ").append(where);
 			}
-			if (query.getOrderBy() != null)
-				sb.append(" ORDER BY ").append(query.getOrderBy());
+			if (query.makeOrderBy() != null)
+				sb.append(" ORDER BY ").append(query.makeOrderBy());
 		} else {
 			where = handler.getNotNullColumnEqualFieldAnd(parameter);
 			if (where.length() > 0) {

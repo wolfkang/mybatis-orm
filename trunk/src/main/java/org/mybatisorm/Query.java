@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.mybatisorm.Condition.Item;
+import org.mybatisorm.annotation.handler.HandlerFactory;
 import org.mybatisorm.annotation.handler.TableHandler;
 
 public class Query {
@@ -93,6 +94,13 @@ public class Query {
 		this.pageNumber = pageNumber;
 		this.rows = rows;
 		this.condition = condition;
+	}
+	
+	public String makeOrderBy() {
+		if (orderBy == null)
+			return null;
+		
+		return HandlerFactory.getHandler(parameter).makeOrderBy(orderBy);
 	}
 	
 	public String getOrderBy() {
