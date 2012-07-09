@@ -25,7 +25,7 @@ import org.mybatisorm.annotation.NamingRule;
 public class ColumnAnnotation {
 	private static Hashtable<Field,String> nameTable = new Hashtable<Field,String>();
 	
-	public static synchronized String getName(Column column, Field field) {
+	public static synchronized String getName(Field field, Column column) {
 		if (column == null)
 			return null;
 		
@@ -56,7 +56,7 @@ public class ColumnAnnotation {
 	}
 	
 	public static String getName(Field field) {
-		return getName(field.getAnnotation(Column.class),field);
+		return getName(field, field.getAnnotation(Column.class));
 	}
 	
 	public static void main(String[] args) {

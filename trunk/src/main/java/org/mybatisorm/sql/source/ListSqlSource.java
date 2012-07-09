@@ -28,23 +28,17 @@ public class ListSqlSource extends AbstractSelectSqlSource {
 		super(sqlSourceParser, clazz);
 	}
 
-	public BoundSql getBoundSql(final Object parameter) {
+	public BoundSql getBoundSql(final Object queryParam) {
+		Query query = (Query)queryParam;
 		String where = null;
 		StringBuilder sb = new StringBuilder(staticSql);
-		if (parameter instanceof Query) {
-			Query query = (Query)parameter;
-			where = query.hasCondition() ? query.getCondition() : query.getNotNullColumnEqualFieldAnd(handler);
-			if (where != null && where.length() > 0) {
-				sb.append(" WHERE ").append(where);
-			}
-			if (query.hasOrderBy())
-				sb.append(" ORDER BY ").append(query.makeOrderBy());
-		} else {
-			where = handler.getNotNullColumnEqualFieldAnd(parameter);
-			if (where.length() > 0) {
-				sb.append(" WHERE ").append(where);
-			}
+		where = query.hasCondition() ? query.getCondition() :
+			handler.getNotNullColumnEqualFieldAnd(query.getParameter(),Query.PARAMETER_PREFIX);
+		if (where != null && where.length() > 0) {
+			sb.append(" WHERE ").append(where);
 		}
-		return getBoundSql(sb.toString(),parameter);
+		if (query.hasOrderBy())
+			sb.append(" ORDER BY ").append(query.buildOrderBy());
+		return getBoundSql(sb.toString(),queryParam);
 	}
 }

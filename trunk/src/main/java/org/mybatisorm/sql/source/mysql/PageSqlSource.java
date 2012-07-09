@@ -34,12 +34,13 @@ public class PageSqlSource extends AbstractSelectSqlSource {
 		String where = null;
 
 		StringBuilder sb = new StringBuilder(staticSql);
-		where = (query.getCondition() != null) ? query.getCondition() : query.getNotNullColumnEqualFieldAnd(handler);
+		where = (query.getCondition() != null) ? query.getCondition() :
+			handler.getNotNullColumnEqualFieldAnd(query.getParameter());
 		if (where.length() > 0) {
 			sb.append(" WHERE ").append(where);
 		}
 		if (query.hasOrderBy())
-			sb.append(" ORDER BY ").append(query.makeOrderBy());
+			sb.append(" ORDER BY ").append(query.buildOrderBy());
 
 		query.setStart((query.getPageNumber()-1)*query.getRows());
 		sb.append(" LIMIT #{start}, #{rows}");

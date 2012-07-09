@@ -29,6 +29,6 @@ public class InsertSqlSource extends AbstractInsertSqlSource {
 	}
 
 	public BoundSql getBoundSql(final Object parameter) {
-		return getBoundSql(parameter,handler.getNonAutoIncrementNotNullFieldList(parameter));
+		return getBoundSql(parameter,handler.getNotNullNonAutoIncrementFieldList(parameter));
 	}
 }

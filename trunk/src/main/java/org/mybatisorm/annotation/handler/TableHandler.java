@@ -21,6 +21,7 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -37,6 +38,8 @@ public class TableHandler {
 
 	private List<Field> columnFields;
 
+	private List<Field> primaryKeyFields;
+	
 	protected String name;
 
 	public TableHandler(Class<?> clazz) {
@@ -67,7 +70,7 @@ public class TableHandler {
 		for (Field field : getColumnFields()) {
 			Column column = field.getAnnotation(Column.class); 
 			if (!column.autoIncrement())
-				fieldList.add(field.getName(), ColumnAnnotation.getName(column,field));
+				fieldList.add(field.getName(), ColumnAnnotation.getName(field,column));
 		}
 		return fieldList;
 	}
@@ -83,6 +86,17 @@ public class TableHandler {
 		return columnFields;
 	}
 
+	protected synchronized List<Field> getPrimaryKeyFields() {
+		if (primaryKeyFields != null)
+			return primaryKeyFields;
+		primaryKeyFields = new LinkedList<Field>();
+		for (Field field : getColumnFields()) {
+			if (field.getAnnotation(Column.class).primaryKey())
+				primaryKeyFields.add(field);
+		}
+		return primaryKeyFields;
+	}
+	
 	public static List<Field> getFields(Class<?> clazz) {
 		List<Field> fields = new ArrayList<Field>();
 		Class<?> superClass = clazz.getSuperclass(); 
@@ -93,41 +107,48 @@ public class TableHandler {
 		return fields;
 	}
 
-	public String getNonPrimaryKeyColumnComma() {
+	public String getNonPrimaryKeyComma() {
 		StringBuilder sb = new StringBuilder();
 		for (Field field : getColumnFields()) {
 			Column column = field.getAnnotation(Column.class); 
 			if (!column.primaryKey()) {
 				if (sb.length() > 0)
 					sb.append(",");
-				sb.append(ColumnAnnotation.getName(column,field));
+				sb.append(ColumnAnnotation.getName(field,column));
 			}
 		}
 		return sb.toString();
 	}
 
-	public String getNonPrimaryKeyColumnEqualFieldComma() {
+	public String getPrimaryKeyComma() {
+		StringBuilder sb = new StringBuilder();
+		for (Field field : getPrimaryKeyFields()) {
+			if (sb.length() > 0)
+				sb.append(",");
+			sb.append(ColumnAnnotation.getName(field));
+		}
+		return sb.toString();
+	}
+	
+	public String getNonPrimaryKeyEqualFieldComma() {
 		StringBuilder sb = new StringBuilder();
 		for (Field field : getColumnFields()) {
 			Column column = field.getAnnotation(Column.class); 
 			if (!column.primaryKey()) {
 				if (sb.length() > 0)
 					sb.append(",");
-				sb.append(ColumnAnnotation.getName(column,field)).append(" = #{").append(field.getName()).append("}");
+				sb.append(ColumnAnnotation.getName(field,column)).append(" = #{").append(field.getName()).append("}");
 			}
 		}
 		return sb.toString();
 	}
 
-	public String getPrimaryKeyColumnEqualFieldAnd() {
+	public String getPrimaryKeyEqualFieldAnd() {
 		StringBuilder sb = new StringBuilder();
-		for (Field field : getColumnFields()) {
-			Column column = field.getAnnotation(Column.class); 
-			if (column.primaryKey()) {
-				if (sb.length() > 0)
-					sb.append(" AND ");
-				sb.append(ColumnAnnotation.getName(column,field)).append(" = #{").append(field.getName()).append("}");
-			}
+		for (Field field : getPrimaryKeyFields()) {
+			if (sb.length() > 0)
+				sb.append(" AND ");
+			sb.append(ColumnAnnotation.getName(field)).append(" = #{").append(field.getName()).append("}");
 		}
 		return sb.toString();
 	}
@@ -153,14 +174,14 @@ public class TableHandler {
 				Column column = field.getAnnotation(Column.class);
 				if (sb.length() > 0)
 					sb.append(delimiter);
-				sb.append(columnPrefix).append(ColumnAnnotation.getName(column,field)).append(" = ")
+				sb.append(columnPrefix).append(ColumnAnnotation.getName(field,column)).append(" = ")
 					.append(" #{").append(fieldPrefix).append(field.getName()).append("}");
 			}
 		}
 		return sb.toString();
 	}
 	
-	public String getNonPrimaryKeyNotNullColumnEqualFieldComma(Object object) {
+	public String getNotNullNonPrimaryKeyEqualFieldComma(Object object) {
 		StringBuilder sb = new StringBuilder();
 		BeanWrapper bean = new BeanWrapperImpl(object);
 		for (Field field : getColumnFields()) {
@@ -170,14 +191,14 @@ public class TableHandler {
 				if (value != null) {
 					if (sb.length() > 0)
 						sb.append(", ");
-					sb.append(ColumnAnnotation.getName(column,field)).append(" = ").append(" #{").append(field.getName()).append("}");
+					sb.append(ColumnAnnotation.getName(field,column)).append(" = ").append(" #{").append(field.getName()).append("}");
 				}
 			}
 		}
 		return sb.toString();
 	}
 
-	public String getNonPrimaryKeyNotNullColumnEqualColumnPlusFieldComma(Object object) {
+	public String getNotNullNonPrimaryKeyEqualPlusFieldComma(Object object) {
 		String columnName = null;
 		StringBuilder sb = new StringBuilder();
 		BeanWrapper bean = new BeanWrapperImpl(object);
@@ -188,7 +209,7 @@ public class TableHandler {
 				if (value != null) {
 					if (sb.length() > 0)
 						sb.append(", ");
-					columnName = ColumnAnnotation.getName(column,field); 
+					columnName = ColumnAnnotation.getName(field,column); 
 					sb.append(columnName).append(" = ").append(columnName).append(" + #{").append(field.getName()).append("}");
 				}
 			}
@@ -202,7 +223,7 @@ public class TableHandler {
 			Column column = field.getAnnotation(Column.class);
 			if (sb.length() > 0)
 				sb.append(",");
-			sb.append(ColumnAnnotation.getName(column,field));
+			sb.append(ColumnAnnotation.getName(field,column));
 		}
 		return sb.toString();
 	}
@@ -218,7 +239,7 @@ public class TableHandler {
 			if (sb.length() > 0)
 				sb.append(",");
 
-			String columnName = ColumnAnnotation.getName(column,field);
+			String columnName = ColumnAnnotation.getName(field,column);
 			if (!"".equals(columnName)) {
 				sb.append(columnName).append(" ");
 			}
@@ -234,13 +255,13 @@ public class TableHandler {
 			Object value = bean.getPropertyValue(field.getName());
 			if (value != null) {
 				Column column = field.getAnnotation(Column.class);
-				fieldList.add(field.getName(), ColumnAnnotation.getName(column,field));
+				fieldList.add(field.getName(), ColumnAnnotation.getName(field,column));
 			}
 		}
 		return fieldList;
 	}
 
-	public FieldList getNonAutoIncrementNotNullFieldList(Object object) {
+	public FieldList getNotNullNonAutoIncrementFieldList(Object object) {
 		FieldList fieldList = new FieldList();
 		BeanWrapper bean = new BeanWrapperImpl(object);
 		for (Field field : getColumnFields()) {
@@ -248,7 +269,7 @@ public class TableHandler {
 			if (!column.autoIncrement()) {
 				Object value = bean.getPropertyValue(field.getName());
 				if (value != null) {
-					fieldList.add(field.getName(), ColumnAnnotation.getName(column,field));
+					fieldList.add(field.getName(), ColumnAnnotation.getName(field,column));
 				}
 			}
 		}
@@ -407,5 +428,34 @@ public class TableHandler {
 		}
 	}
 
+	public String getNotNullPrimaryKeyEqualFieldAnd(Object object, String fieldPrefix) {
+		StringBuilder sb = new StringBuilder();
+		BeanWrapper bean = new BeanWrapperImpl(object);
+		for (Field field : getPrimaryKeyFields()) {
+			Object value = bean.getPropertyValue(field.getName());
+			if (value != null) {
+				if (sb.length() > 0)
+					sb.append(" AND ");
+				sb.append(ColumnAnnotation.getName(field)).append(" = ")
+					.append(" #{").append(fieldPrefix).append(field.getName()).append("}");
+			}
+		}
+		return sb.toString();
+	}
+
+	public String getNotNullPrimaryKeyComma(Object object) {
+		StringBuilder sb = new StringBuilder();
+		BeanWrapper bean = new BeanWrapperImpl(object);
+		for (Field field : getPrimaryKeyFields()) {
+			Object value = bean.getPropertyValue(field.getName());
+			if (value != null) {
+				if (sb.length() > 0)
+					sb.append(", ");
+				sb.append(ColumnAnnotation.getName(field));
+			}
+		}
+		return sb.toString();
+	}
+	
 
 }

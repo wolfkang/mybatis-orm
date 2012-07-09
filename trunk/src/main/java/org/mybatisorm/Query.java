@@ -62,9 +62,7 @@ public class Query {
 	}
 	
 	public Query(Object parameter, String condition, String orderBy) {
-		this.parameter = parameter;
-		this.orderBy = orderBy;
-		setCondition(condition);
+		this(parameter, new Condition().add(condition), orderBy);
 	}
 	
 	public Query(Object parameter, Condition condition, String orderBy) {
@@ -81,11 +79,7 @@ public class Query {
 	}
 	
 	public Query(Object parameter, String condition, String orderBy, int pageNumber, int rows) {
-		this.parameter = parameter;
-		this.orderBy = orderBy;
-		this.pageNumber = pageNumber;
-		this.rows = rows;
-		setCondition(condition);
+		this(parameter, new Condition().add(condition), orderBy, pageNumber, rows);
 	}
 
 	public Query(Object parameter, Condition condition, String orderBy, int pageNumber, int rows) {
@@ -96,7 +90,7 @@ public class Query {
 		this.condition = condition;
 	}
 	
-	public String makeOrderBy() {
+	public String buildOrderBy() {
 		if (orderBy == null)
 			return null;
 		
@@ -123,10 +117,6 @@ public class Query {
 	}
 	public boolean hasCondition() {
 		return condition != null;
-	}
-	private void setCondition(String condition) {
-		this.condition = new Condition();
-		this.condition.add(condition);
 	}
 	private static String replaceParam(String value) {
 		return value.replaceAll(PARAMETER_RE, CONDITION_REPLACEMENT);
@@ -177,14 +167,21 @@ public class Query {
 		return "#{properties."+index+"}";
 	}
 	
-	public String getNotNullColumnEqualFieldAnd(TableHandler handler) {
+	public String getNotNullColumnEqualFieldAnd1(TableHandler handler) {
 		return parameter == null ? "" :
 			handler.getNotNullColumnEqualFieldAnd(parameter,PARAMETER_PREFIX);
 	}
-	
+
+	public String getPrimaryKeyNotNullColumnEqualFieldAnd1(TableHandler handler) {
+		return parameter == null ? "" :
+			handler.getNotNullPrimaryKeyEqualFieldAnd(parameter,PARAMETER_PREFIX);
+	}
+
 	public static void main(String[] args) {
 		Matcher m = PARAMETER_PATTERN.matcher("'%' || #{board.messageId} || '%'");
 //		Matcher m = PARAMETER_PATTERN.matcher("'%' || #{name} || '%'#{board.messageId}");
 		System.out.println(m.find());
 	}
+
+
 }

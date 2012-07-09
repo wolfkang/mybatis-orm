@@ -29,7 +29,7 @@ public abstract class AbstractUpdateSqlSource extends DynamicSqlBuilder {
 	public AbstractUpdateSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
 		super(sqlSourceParser,clazz);
 		staticSql = "UPDATE " + handler.getName() + " SET ";
-		where = handler.getPrimaryKeyColumnEqualFieldAnd();
+		where = handler.getPrimaryKeyEqualFieldAnd();
 	}
 	
 	protected BoundSql makeSet(String set, Object parameter) {
