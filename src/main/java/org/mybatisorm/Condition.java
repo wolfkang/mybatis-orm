@@ -68,22 +68,26 @@ public class Condition {
 		this.seperator = seperator;
 	}
 	
-	public void add(String field, String operator, Object ... value) {
+	public Condition add(String field, String operator, Object ... value) {
 		list.add(new Item(field,
 				(operator == null) ? null : operator.trim(),
 						(value != null && value.length == 1) ? value[0] : value));
+		return this;
 	}
 	
-	public void add(String operator, Object ... value) {
+	public Condition add(String operator, Object ... value) {
 		add(null,operator,value);
+		return this;
 	}
 	
-	public void add(String condition) {
+	public Condition add(String condition) {
 		list.add(condition);
+		return this;
 	}
 	
-	public void add(Condition condition) {
+	public Condition add(Condition condition) {
 		list.add(condition);
+		return this;
 	}
 	
 	public String build(Query query) {
@@ -117,7 +121,7 @@ public class Condition {
 				sb.append("(").append(((Condition)o).build(query)).append(")");
 			}
 			if (it.hasNext())
-				sb.append(seperator).append(" ");
+				sb.append(" ").append(seperator).append(" ");
 		}
 		return sb.toString();
 	}

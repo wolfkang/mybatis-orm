@@ -29,7 +29,7 @@ public class UpdateSqlSource extends AbstractUpdateSqlSource {
 
 	public BoundSql getBoundSql(final Object parameter) {
 		return makeSet(
-				handler.getNonPrimaryKeyNotNullColumnEqualFieldComma(parameter),
+				handler.getNotNullNonPrimaryKeyEqualFieldComma(parameter),
 				parameter);
 	}
 }

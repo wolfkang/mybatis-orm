@@ -310,7 +310,7 @@ public class JoinHandler extends TableHandler {
 				continue;
 			List<Field> fieldList = HandlerFactory.getHandler(clazzField.getType()).getColumnFields();
 			if ("*".equals(value)) {
-				propertyFields.add(new PropertyField(clazzField.getName(),fieldList));
+				propertyFields.add(new PropertyField(clazzField,fieldList));
 			} else {
 				List<Field> columnFields = new ArrayList<Field>();
 				Set<String> fieldSet = new HashSet<String>(Arrays.asList(value.replaceAll("\\s", "").split(",")));
@@ -318,7 +318,7 @@ public class JoinHandler extends TableHandler {
 					if (fieldSet.contains(field.getName()))
 						columnFields.add(field);
 				}
-				propertyFields.add(new PropertyField(clazzField.getName(),columnFields));
+				propertyFields.add(new PropertyField(clazzField,columnFields));
 			}
 		}
 
@@ -335,6 +335,45 @@ public class JoinHandler extends TableHandler {
 				sb.append(property.name).append("_.").append(ColumnAnnotation.getName(field))
 					.append(" ").append(getAlias(property.name,field.getName(),index++));
 					//property.name).append("_").append(field.getName());
+			}
+		}
+		return sb.toString();
+	}
+
+	public String getPrimaryKeyComma() {
+		StringBuilder sb = new StringBuilder();
+		int index = 0;
+		for (PropertyField property : getPropertyFields()) {
+			for (Field field : HandlerFactory.getHandler(property.type).getPrimaryKeyFields()) {
+				if (sb.length() > 0)
+					sb.append(", ");
+				sb.append(property.name).append("_.").append(ColumnAnnotation.getName(field))
+				.append(" ").append(getAlias(property.name,field.getName(),index++));
+			}
+		}
+		return sb.toString();
+	}
+	
+
+	public String getNotNullPrimaryKeyEqualFieldAnd(Object object, String fieldPrefix) {
+		StringBuilder sb = new StringBuilder();
+		int index = 0;
+		Object value;
+		BeanWrapper bean = new BeanWrapperImpl(object), pbean;
+		for (PropertyField property : getPropertyFields()) {
+			value = bean.getPropertyValue(property.name);
+			if (value == null)
+				continue;
+			
+			pbean =  new BeanWrapperImpl(value);
+			for (Field field : HandlerFactory.getHandler(value).getPrimaryKeyFields()) {
+				if (pbean.getPropertyValue(field.getName()) != null) {
+					if (sb.length() > 0)
+						sb.append(" AND ");
+					sb.append(getAlias(property.name,field.getName(),index)).append(" = ")
+						.append(" #{").append(fieldPrefix).append(property.name).append(".").append(field.getName()).append("}");
+				}
+				index++;
 			}
 		}
 		return sb.toString();
@@ -396,9 +435,11 @@ public class JoinHandler extends TableHandler {
 
 	static class PropertyField {
 		String name;
+		Class<?> type;
 		List<Field> fieldList;
-		public PropertyField(String name, List<Field> list) {
-			this.name = name;
+		public PropertyField(Field clazzField, List<Field> list) {
+			this.name = clazzField.getName();
+			this.type = clazzField.getType();
 			this.fieldList = list;
 		}
 	}
