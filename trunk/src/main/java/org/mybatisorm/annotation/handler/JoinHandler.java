@@ -354,7 +354,6 @@ public class JoinHandler extends TableHandler {
 		return sb.toString();
 	}
 	
-
 	public String getNotNullPrimaryKeyEqualFieldAnd(Object object, String fieldPrefix) {
 		StringBuilder sb = new StringBuilder();
 		int index = 0;
@@ -459,7 +458,7 @@ public class JoinHandler extends TableHandler {
 		return columnName != null ? field.getName() + "_." + columnName : null;
 	}
 	
-	public String makeOrderBy(String orderBy) {
+	public String buildOrderBy(String orderBy) {
 		StringBuilder sb = new StringBuilder();
 		QueryTokenizer tokenizer = new QueryTokenizer(orderBy);
 		QueryTokenizer.TokenType type;

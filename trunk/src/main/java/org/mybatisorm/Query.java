@@ -94,7 +94,7 @@ public class Query {
 		if (orderBy == null)
 			return null;
 		
-		return HandlerFactory.getHandler(parameter).makeOrderBy(orderBy);
+		return HandlerFactory.getHandler(parameter).buildOrderBy(orderBy);
 	}
 	
 	public String getOrderBy() {
