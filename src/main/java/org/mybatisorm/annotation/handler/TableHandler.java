@@ -317,7 +317,7 @@ public class TableHandler {
 		return columnName;
 	}
 	
-	public String makeOrderBy(String orderBy) {
+	public String buildOrderBy(String orderBy) {
 		QueryTokenizer tokenizer = new QueryTokenizer(orderBy);
 		QueryTokenizer.TokenType type;
 		String text;
