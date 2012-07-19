@@ -16,8 +16,6 @@
 package org.mybatisorm.annotation.handler;
 
 import java.lang.reflect.Field;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
