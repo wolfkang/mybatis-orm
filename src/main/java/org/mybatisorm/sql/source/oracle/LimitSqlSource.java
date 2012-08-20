@@ -54,7 +54,7 @@ public class LimitSqlSource extends DynamicSqlBuilder {
 			throw new MyBatisOrmException("The 'order by' clause is required.");
 
 		String where = "";
-		where = query.hasCondition() ? query.getCondition() : handler.getNotNullColumnEqualFieldAnd(query.getParameter());
+		where = query.hasCondition() ? query.getCondition() : query.getNotNullColumnEqualFieldAndVia(handler);
 		if (where.length() > 0) {
 			where = "WHERE " + where;
 		}

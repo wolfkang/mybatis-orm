@@ -164,7 +164,7 @@ public class Query {
 		return "#{properties."+index+"}";
 	}
 	
-	public String getNotNullColumnEqualFieldAnd1(TableHandler handler) {
+	public String getNotNullColumnEqualFieldAndVia(TableHandler handler) {
 		return parameter == null ? "" :
 			handler.getNotNullColumnEqualFieldAnd(parameter,PARAMETER_PREFIX);
 	}

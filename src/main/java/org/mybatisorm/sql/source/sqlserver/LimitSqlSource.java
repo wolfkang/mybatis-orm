@@ -13,9 +13,8 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatisorm.sql.source.oracle;
+package org.mybatisorm.sql.source.sqlserver;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.ibatis.builder.SqlSourceBuilder;
@@ -29,45 +28,40 @@ import org.mybatisorm.exception.MyBatisOrmException;
 import org.mybatisorm.sql.builder.DynamicSqlBuilder;
 
 @SqlCommand(SqlCommandType.SELECT)
-public class RownumSqlSource extends DynamicSqlBuilder {
-/*
-	SELECT rnum FROM (
-		SELECT message_key, row_number() OVER (ORDER BY message_key desc) rnum FROM
-		NBBS_message
-	    WHERE board_key = 123
-	)
-	WHERE message_key = 103
-*/
-	private static Logger logger = Logger.getLogger(RownumSqlSource.class);
+public class LimitSqlSource extends DynamicSqlBuilder {
+
+	private static Logger logger = Logger.getLogger(LimitSqlSource.class);
 	
-	public RownumSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
+	public LimitSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
 		super(sqlSourceParser,clazz);
-		staticSql = "SELECT rnum FROM " +
-				"(SELECT " + handler.getPrimaryKeyComma() + ", ROW_NUMBER() OVER (ORDER BY %s) rnum " +
-				" FROM " + handler.getName() + " WHERE %s ) WHERE %s";
+		staticSql = 
+				"SELECT " + handler.getColumnAsFieldComma() + " FROM " +
+				handler.getName() + " %s ORDER BY %s " +  // where + order by
+				" OFFSET (#{start}-1) ROWS FETCH NEXT #{rows} ROWS ONLY";
 	}
 
 	public BoundSql getBoundSql(Object queryParam) {
 		Query query = (Query)queryParam;
-		
-		if (!query.hasCondition())
-			throw new MyBatisOrmException("The condition object is required.");
-		
+
 		if (!query.hasOrderBy())
 			throw new MyBatisOrmException("The 'order by' clause is required.");
+
+		String where = "";
+		where = query.hasCondition() ? query.getCondition() : query.getNotNullColumnEqualFieldAndVia(handler);
+		if (where.length() > 0) {
+			where = "WHERE " + where;
+		}
 		
-		String sql = String.format(staticSql,
-				query.buildOrderBy(),
-				query.getCondition(),
-				handler.getNotNullPrimaryKeyEqualFieldAnd(query.getParameter(),Query.PARAMETER_PREFIX));
-		return getBoundSql(sql,queryParam);
+		return getBoundSql(
+				String.format(staticSql, where, query.buildOrderBy()),
+				query);
+	}
+
+	public List<ResultMapping> getResultMappingList() {
+		return handler.getResultMappingList(sqlSourceBuilder.getConfiguration());
 	}
 	
 	public Class<?> getResultType() {
-		return Integer.class;
-	}
-	
-	public List<ResultMapping> getResultMappingList() {
-		return Collections.emptyList();
+		return handler.getTargetClass();
 	}
 }
