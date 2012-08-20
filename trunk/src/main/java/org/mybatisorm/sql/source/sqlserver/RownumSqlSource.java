@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatisorm.sql.source.oracle;
+package org.mybatisorm.sql.source.sqlserver;
 
 import java.util.Collections;
 import java.util.List;

@@ -298,7 +298,7 @@ public class TableHandler {
 		return rfields;
 	}
 	
-	public List<Field> getReferenceFields(Class clazz) {
+	public List<Field> getReferenceFields(Class<?> clazz) {
 		List<Field> fields = getColumnFields(), rfields = new ArrayList<Field>();
 		for (Field field : fields) {
 			String references = field.getAnnotation(Column.class).references();

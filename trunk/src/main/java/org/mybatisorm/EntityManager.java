@@ -86,7 +86,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		sqlSourceClassMap = new HashMap<String,Class<?>>();
 		
 		ResourceBundle bundle = new PropertyResourceBundle(
-				this.getClass().getClassLoader().getResourceAsStream("SqlSources.properties"));
+				this.getClass().getClassLoader().getResourceAsStream("sql-sources.properties"));
 //				ClassLoader.getSystemResourceAsStream("SqlSources.properties"));
 		for (String source : bundle.getString(sourceType+".sqlsources").split(",")) {
 			sqlSourceClassMap.put(source,Class.forName(bundle.getString(sourceType+"."+source)));
@@ -291,6 +291,10 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 		return list(new Query(parameter,orderBy));
 	}
 
+	public <T> List<T> list(T parameter, String orderBy, int rows) {
+		return list(parameter,null,orderBy,1,rows);
+	}
+	
 	/**
 	 * condition으로 where 조건을 생성하여 매핑 테이블을 select한 다음,
 	 * object와 동일한 타입의 객체를 java.util.List 에 담아 리턴한다.

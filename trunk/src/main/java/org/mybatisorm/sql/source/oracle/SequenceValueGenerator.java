@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package org.mybatisorm.sql.source.mysql;
+package org.mybatisorm.sql.source.oracle;
 
 import java.lang.reflect.Field;
 
@@ -24,19 +24,20 @@ import org.mybatisorm.annotation.Column;
 import org.mybatisorm.annotation.handler.TableHandler;
 import org.mybatisorm.sql.source.ValueGeneratorImpl;
 
-public class ValueGenerator extends ValueGeneratorImpl {
+public class SequenceValueGenerator extends ValueGeneratorImpl {
 
 	protected KeyGenerator keyGenerator(Builder builder, String parentId, Class<?> clazz) {
 		GeneratedField generated = getGeneratedField(clazz);
-		return generated == null ? new NoKeyGenerator() : newJdbc3KeyGenerator(builder,generated);
+		return generated == null ? new NoKeyGenerator() : newSelectKeyGenerator(generated,parentId);
 	}
-
+	
 	protected GeneratedField getGeneratedField(Class<?> clazz) {
 		for (Field field : TableHandler.getFields(clazz)) {
 			if (field.isAnnotationPresent(Column.class)) {
 				Column column = field.getAnnotation(Column.class); 
-				if (column.autoIncrement()) {
-					return new GeneratedField(field);
+				String sequence = column.sequence(); 
+				if (!"".equals(sequence)) {
+					return new GeneratedField(field,"SELECT "+sequence + ".NEXTVAL " + field.getName() + " FROM DUAL");
 				}
 			}
 		}

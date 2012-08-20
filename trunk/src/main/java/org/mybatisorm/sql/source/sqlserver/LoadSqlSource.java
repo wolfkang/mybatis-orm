@@ -1,0 +1,50 @@
+/*
+ *    Copyright 2012 The MyBatisORM Team
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+package org.mybatisorm.sql.source.sqlserver;
+
+import java.util.List;
+
+import org.apache.ibatis.builder.SqlSourceBuilder;
+import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.ResultMapping;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.mybatisorm.annotation.SqlCommand;
+import org.mybatisorm.sql.builder.DynamicSqlBuilder;
+
+@SqlCommand(value=SqlCommandType.SELECT)
+public class LoadSqlSource extends DynamicSqlBuilder {
+	
+	public LoadSqlSource(SqlSourceBuilder sqlSourceParser, Class<?> clazz) {
+		super(sqlSourceParser, clazz);
+		staticSql = "SELECT TOP 1 * FROM " + handler.getName();
+	}
+
+	public BoundSql getBoundSql(Object parameter) {
+		StringBuilder sb = new StringBuilder(staticSql);
+		String cf = handler.getNotNullColumnEqualFieldAnd(parameter);
+		if (cf.length() > 0)
+			sb.append(" WHERE ").append(cf);
+		return getBoundSql(sb.toString(),parameter);
+	}
+	
+	public List<ResultMapping> getResultMappingList() {
+		return handler.getResultMappingList(sqlSourceBuilder.getConfiguration());
+	}
+	
+	public Class<?> getResultType() {
+		return handler.getTargetClass();
+	}
+}
