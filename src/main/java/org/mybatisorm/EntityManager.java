@@ -328,6 +328,15 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 	/**
 	 * @param parameter
 	 * @param condition
+	 * @return
+	 */
+	public <T> List<T> list(T parameter, Condition condition) {
+		return list(new Query(parameter,condition,null));
+	}
+	
+	/**
+	 * @param parameter
+	 * @param condition
 	 * @param orderBy
 	 * @return
 	 */
