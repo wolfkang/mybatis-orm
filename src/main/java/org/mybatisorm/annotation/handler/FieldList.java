@@ -40,7 +40,6 @@ public class FieldList implements Iterable<String[]> {
 			return new String[] {fieldList.getFieldNames().get(index), fieldList.getColumnNames().get(index++)};
 		}
 		public void remove() {
-			// TODO Auto-generated method stub
 		}
 	}
 	public FieldList() {
