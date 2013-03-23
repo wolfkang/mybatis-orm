@@ -12,6 +12,7 @@
 
 || Elements || Description || Type || Default || Database ||
 || value  || column naming rule || NamingRule || NamingRule.NONE || All ||
+|| prefix  || 컬럼명 접두사 || String || "" || All ||
 
 = NamingRule =
 
@@ -64,6 +65,47 @@ public class Group {
 	protected String groupID;
 	
 	@Column(name="GROUP_NAME")
+	protected String groupName;
+}
+}}}
+
+아래의 두 매핑 클래스는 동일한 컬럼명을 갖는다.
+
+{{{
+@Table("GROUP")
+@ColumnNaming(value=NamingRule.UPPERCASE_UNDERSCORE, prefix="GR_")
+public class Group {
+	@Column(primaryKey = true)
+	protected Long groupID;
+
+	@Column
+	protected Long parentGroupKey;
+
+	@Column
+	protected Integer groupType;
+
+	@Column
+	protected String groupID;
+
+	@Column
+	protected String groupName;
+}
+
+@Table("GROUP")
+public class Group {
+	@Column(name = "GR_GROUP_KEY",  primaryKey = true)
+	protected Long groupKey;
+
+	@Column(name="GR_PARENT_GROUP_KEY")
+	protected Long parentGroupKey;
+	
+	@Column(name="GR_GROUP_TYPE")
+	protected Integer groupType;
+		
+	@Column(name="GR_GROUP_ID")
+	protected String groupID;
+	
+	@Column(name="GR_GROUP_NAME")
 	protected String groupName;
 }
 }}}
