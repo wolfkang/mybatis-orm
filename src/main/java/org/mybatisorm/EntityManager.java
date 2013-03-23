@@ -469,7 +469,7 @@ public class EntityManager extends SqlSessionDaoSupport implements InitializingB
 				List<ResultMap> resultMaps = new ArrayList<ResultMap>();
 				ResultMap.Builder resultMapBuilder = new ResultMap.Builder(configuration, statementBuilder.id() + "-Inline", resultType, sqlBuilder.getResultMappingList());
 				resultMaps.add(resultMapBuilder.build());
-				if (logger.isDebugEnabled()) logger.debug("add a resultMap [" + statementBuilder.id() + "-Inline] ==> [" + id + "]");
+				// if (logger.isDebugEnabled()) logger.debug("add a resultMap [" + statementBuilder.id() + "-Inline] ==> [" + id + "]");
 				statementBuilder.resultMaps(resultMaps);
 			}
 			if (SqlCommandType.INSERT.equals(sqlType)) {

@@ -236,8 +236,7 @@ public class TableHandler {
 			if (!"".equals(columnName)) {
 				sb.append(columnName).append(" ");
 			}
-			// 2013-03-23 컬럼 뒤에 필드명을 붙이면 Inline ResultMap 에서 인식 하지 못함
-			// sb.append(field.getName());
+			sb.append(field.getName());
 		}
 		return sb.toString();
 	}
@@ -284,7 +283,7 @@ public class TableHandler {
 				// add typeHandler
 				if (field.isAnnotationPresent(TypeHandler.class)) {
 					TypeHandler typeHandlerAnnotation = field.getAnnotation(TypeHandler.class);
-					if (logger.isDebugEnabled()) logger.debug("add typeHandler [" + typeHandlerAnnotation.value().getName() + "] for " + columnName + ":" + typeHandlerAnnotation.jdbcType());
+					// if (logger.isDebugEnabled()) logger.debug("add typeHandler [" + typeHandlerAnnotation.value().getName() + "] for " + columnName + ":" + typeHandlerAnnotation.jdbcType());
 					builder.typeHandler(BeanUtils.instantiate(typeHandlerAnnotation.value())).jdbcType(typeHandlerAnnotation.jdbcType());
 
 				}
