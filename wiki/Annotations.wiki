@@ -95,6 +95,38 @@ class GroupAndUser {
 
 *Since:* 0.3
 
+= `@TypeHandler` =
+
+{{{
+@TypeHandler(value, jdbcType)
+}}}
+
+|| Elements || Description || Type || Default || Database ||
+|| value  || TypeHandler 를 구현한 클래스 || Class<?> ||  || All ||
+|| jdbcType  || 데이터베이스 측 타입 || JdbcType || JdbcType.VARCHAR || All ||
+
+필드 맵핑시 TypeHandler를 지정할 경우 사용한다.
+
+== 제공 TypeHandler ==
+
+  * org.mybatisorm.type.YNTypeHandler : Boolean => 'Y' or 'N'
+  * org.mybatisorm.type.TFTypeHandler : Boolean => 'T' or 'F'
+
+
+{{{
+@Table
+class User {
+    @Column
+    String name;
+    @Column
+    @TypeHandler(YNTypeHandler.class)
+    Boolean male; // Y = Male , N = Female
+}
+}}}
+
+related r187, issue 2
+
+TypeHandler 참고 http://mybatis.github.com/mybatis-3/configuration.html#typeHandlers
 
 = Example =
 For MySQL,
