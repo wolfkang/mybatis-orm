@@ -57,6 +57,10 @@ public class Group implements java.io.Serializable {
 
 	public Group() {}
 
+    public Group(Long groupID) {
+        this.groupID = groupID;
+    }
+
 	public static void main(String[] args) {
 		for (Field field : Group.class.getDeclaredFields()) {
 			if (field.isAnnotationPresent(Column.class)) System.out.println(field.getName() + ":" + ColumnAnnotation.getName(field));
